@@ -1,0 +1,2 @@
+.yarn/cache/* linguist-vendored
+.pnp.* linguist-generated=true
