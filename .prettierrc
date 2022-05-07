@@ -1,0 +1,7 @@
+{
+  "semi": false,
+  "importOrder": ["^[./]"],
+  "importOrderSortSpecifiers": true,
+  "importOrderCaseInsensitive": true,
+  "pugSingleQuote": false
+}
