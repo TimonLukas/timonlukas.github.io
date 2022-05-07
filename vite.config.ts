@@ -1,13 +1,12 @@
-import vue from "@vitejs/plugin-vue"
-import { fileURLToPath, URL } from "url"
 import { defineConfig } from "vite"
+import vitePluginVue from "@vitejs/plugin-vue"
+import vitePluginPages from "vite-plugin-pages"
+import vitePluginTsconfigPaths from "vite-tsconfig-paths"
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
-  resolve: {
-    alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
-    },
-  },
+  plugins: [
+    vitePluginTsconfigPaths({ projects: ["tsconfig.app.json"] }),
+    vitePluginVue(),
+    vitePluginPages({ dirs: "pages" }),
+  ],
 })
