@@ -1,3 +1,6 @@
 <template lang="pug">
-h1 Welcome to the index page, weary traveller!
+.index.p-4
+  n-h1 timonlukas.github.io
+  .apps
+    router-link(to="/fairytome") fairytome
 </template>

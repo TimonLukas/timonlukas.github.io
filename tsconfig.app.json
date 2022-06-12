@@ -1,12 +1,15 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "include": ["env.d.ts", "packages/**/*", "pages/**/*"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./packages/*"]
+    },
+    "lib": ["ESNext", "DOM"],
+    "target": "ES2020",
+    "types": ["unplugin-icons/types/vue"]
   }
 }

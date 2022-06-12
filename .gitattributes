@@ -1,2 +1,4 @@
 .yarn/cache/* linguist-vendored
 .pnp.* linguist-generated=true
+packages/framework/types/* linguist-generated=true
+.eslintrc.js linguist-generated=true

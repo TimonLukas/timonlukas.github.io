@@ -1,7 +1,11 @@
 module.exports = {
-  content: ["pages"],
+  content: [
+    "./pages/**/*.{vue,ts}",
+    "./packages/**/*.vue",
+    "./node_modules/@hotellistat/robust-ui/**/*.js",
+  ],
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 }
