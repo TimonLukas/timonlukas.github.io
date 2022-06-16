@@ -5,9 +5,8 @@ slot(:colors="palette")
 <script lang="ts" setup>
 import chroma from "chroma-js"
 import hue from "iwanthue"
+import { PALETTE_COLOR_COUNT } from "@/framework/constants"
 import { PALETTE } from "./provide"
-
-const COLOR_COUNT = 8
 
 const props = withDefaults(
   defineProps<{ seed: string; saturate?: number; offset?: number }>(),
@@ -17,16 +16,19 @@ const props = withDefaults(
   }
 )
 
-const palette = $computed(() => {
-  const colors = hue(COLOR_COUNT, { colorSpace: "pimp", seed: props.seed }).map(
-    (color) => [
-      chroma(color).saturate(props.saturate).hex(),
-      chroma(color).brighten().saturate(props.saturate).hex(),
-      chroma(color).darken().saturate(props.saturate).hex(),
-    ]
-  )
+const totalOffset = $computed(() => props.offset % PALETTE_COLOR_COUNT)
 
-  return [...colors.slice(props.offset), ...colors.slice(0, props.offset)]
+const palette = $computed(() => {
+  const colors = hue(PALETTE_COLOR_COUNT, {
+    colorSpace: "pimp",
+    seed: props.seed,
+  }).map((color) => [
+    chroma(color).saturate(props.saturate).hex(),
+    chroma(color).brighten().saturate(props.saturate).hex(),
+    chroma(color).darken().saturate(props.saturate).hex(),
+  ])
+
+  return [...colors.slice(totalOffset), ...colors.slice(0, totalOffset)]
 })
 
 provide(PALETTE, $$(palette))
@@ -41,11 +43,26 @@ onMounted(() => {
     return element.value
   })
 
-  const styleVariables = Array.from({ length: COLOR_COUNT }, (_, index) => [
-    useCssVar(`--theme-color${index}`, container),
-    useCssVar(`--theme-color${index}-lighter`, container),
-    useCssVar(`--theme-color${index}-darker`, container),
-  ])
+  const themeColorsVariable = useCssVar("--theme-colors", container)
+  themeColorsVariable.value = Array.from(
+    { length: PALETTE_COLOR_COUNT },
+    (_, i) => [
+      `--theme-color${i}`,
+      `--theme-color${i}-lighter`,
+      `--theme-color${i}-darker`,
+    ]
+  )
+    .flat()
+    .join(", ")
+
+  const styleVariables = Array.from(
+    { length: PALETTE_COLOR_COUNT },
+    (_, index) => [
+      useCssVar(`--theme-color${index}`, container),
+      useCssVar(`--theme-color${index}-lighter`, container),
+      useCssVar(`--theme-color${index}-darker`, container),
+    ]
+  )
 
   watch(
     $$(palette),

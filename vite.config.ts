@@ -6,7 +6,9 @@ import { NaiveUiResolver } from "unplugin-vue-components/resolvers"
 import unpluginComponents from "unplugin-vue-components/vite"
 import { fileURLToPath, URL } from "url"
 import { defineConfig } from "vite"
+import vitePluginInspect from "vite-plugin-inspect"
 import vitePluginPages from "vite-plugin-pages"
+import utils from "./packages/utilities/vite"
 
 export default defineConfig({
   resolve: {
@@ -15,11 +17,12 @@ export default defineConfig({
     },
   },
   plugins: [
+    vitePluginInspect(),
     unpluginAutoImport({
       dts: fileURLToPath(
         new URL("./packages/framework/types/auto-import.d.ts", import.meta.url)
       ),
-      imports: ["vue", "@vueuse/core"],
+      imports: ["vue", "vue-router", "@vueuse/core"],
       eslintrc: {
         enabled: true,
       },
@@ -28,12 +31,19 @@ export default defineConfig({
     vitePluginVue({
       reactivityTransform: true,
     }),
-    vitePluginPages({ dirs: "pages" }),
+    vitePluginPages({
+      dirs: utils.pages.fetchDirs(),
+    }),
     unpluginComponents({
       resolvers: [NaiveUiResolver(), IconsResolver()],
       dts: fileURLToPath(
         new URL("./packages/framework/types/components.d.ts", import.meta.url)
       ),
+    }),
+    utils.plugins.ViteGenerateIndex({
+      dirs: ["packages/*/components", "packages/framework/components/ui"],
+      extension: "ts",
+      excludeFiles: [/^.+(\.entry\.)/gm],
     }),
   ],
 })

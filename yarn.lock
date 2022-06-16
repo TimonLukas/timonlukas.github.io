@@ -538,6 +538,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@polka/url@npm:^1.0.0-next.20":
+  version: 1.0.0-next.21
+  resolution: "@polka/url@npm:1.0.0-next.21"
+  checksum: c7654046d38984257dd639eab3dc770d1b0340916097b2fac03ce5d23506ada684e05574a69b255c32ea6a144a957c8cd84264159b545fca031c772289d88788
+  languageName: node
+  linkType: hard
+
 "@prettier/plugin-pug@npm:^2.0.0":
   version: 2.0.0
   resolution: "@prettier/plugin-pug@npm:2.0.0"
@@ -663,6 +670,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/glob@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@types/glob@npm:7.2.0"
+  dependencies:
+    "@types/minimatch": "*"
+    "@types/node": "*"
+  checksum: 6ae717fedfdfdad25f3d5a568323926c64f52ef35897bcac8aca8e19bc50c0bd84630bbd063e5d52078b2137d8e7d3c26eabebd1a2f03ff350fff8a91e79fc19
+  languageName: node
+  linkType: hard
+
 "@types/jest@npm:^27.0.1":
   version: 27.5.1
   resolution: "@types/jest@npm:27.5.1"
@@ -711,6 +728,13 @@ __metadata:
   version: 4.14.182
   resolution: "@types/lodash@npm:4.14.182"
   checksum: 7dd137aa9dbabd632408bd37009d984655164fa1ecc3f2b6eb94afe35bf0a5852cbab6183148d883e9c73a958b7fec9a9bcf7c8e45d41195add6a18c34958209
+  languageName: node
+  linkType: hard
+
+"@types/minimatch@npm:*":
+  version: 3.0.5
+  resolution: "@types/minimatch@npm:3.0.5"
+  checksum: c41d136f67231c3131cf1d4ca0b06687f4a322918a3a5adddc87ce90ed9dbd175a3610adee36b106ae68c0b92c637c35e02b58c8a56c424f71d30993ea220b92
   languageName: node
   linkType: hard
 
@@ -781,6 +805,13 @@ __metadata:
   version: 2.3.3
   resolution: "@types/sizzle@npm:2.3.3"
   checksum: 586a9fb1f6ff3e325e0f2cc1596a460615f0bc8a28f6e276ac9b509401039dd242fa8b34496d3a30c52f5b495873922d09a9e76c50c2ab2bcc70ba3fb9c4e160
+  languageName: node
+  linkType: hard
+
+"@types/svg-path-parser@npm:^1":
+  version: 1.1.3
+  resolution: "@types/svg-path-parser@npm:1.1.3"
+  checksum: 534e5945c9ef557b066078541b24df27326efd33b5ffdafd3ba46c23e099093c41e85c0c309c378f2bf8ea5e3714f7c016caaba5fa3d9b93ad33a7814940feec
   languageName: node
   linkType: hard
 
@@ -3639,6 +3670,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "glob@npm:8.0.3"
+  dependencies:
+    fs.realpath: ^1.0.0
+    inflight: ^1.0.4
+    inherits: 2
+    minimatch: ^5.0.1
+    once: ^1.3.0
+  checksum: 50bcdea19d8e79d8de5f460b1939ffc2b3299eac28deb502093fdca22a78efebc03e66bf54f0abc3d3d07d8134d19a32850288b7440d77e072aa55f9d33b18c5
+  languageName: node
+  linkType: hard
+
 "global-dirs@npm:^3.0.0":
   version: 3.0.0
   resolution: "global-dirs@npm:3.0.0"
@@ -4854,6 +4898,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mlly@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "mlly@npm:0.5.3"
+  dependencies:
+    pathe: ^0.2.0
+    pkg-types: ^0.3.2
+  checksum: 05b76d2167c9e195ae3952ef116b9a00f81af06772e0f27080b95bf57693916447af7b8313d48911fdeb7185bed6c8e8fc45b311c55599a29a1a451a8f8c103c
+  languageName: node
+  linkType: hard
+
+"mrmime@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "mrmime@npm:1.0.1"
+  checksum: cc979da44bbbffebaa8eaf7a45117e851f2d4cb46a3ada6ceb78130466a04c15a0de9a9ce1c8b8ba6f6e1b8618866b1352992bf1757d241c0ddca558b9f28a77
+  languageName: node
+  linkType: hard
+
 "ms@npm:2.1.2":
   version: 2.1.2
   resolution: "ms@npm:2.1.2"
@@ -5917,6 +5978,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sirv@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "sirv@npm:2.0.2"
+  dependencies:
+    "@polka/url": ^1.0.0-next.20
+    mrmime: ^1.0.0
+    totalist: ^3.0.0
+  checksum: 6982f8ecee9392d246d7eeea8144e50334fe1b46a4fa942995a844ea88c2d518b17cce781bb09926c9a5692a7002a207d18dfd67af2aa538a15e733dc2042298
+  languageName: node
+  linkType: hard
+
 "slash@npm:^3.0.0":
   version: 3.0.0
   resolution: "slash@npm:3.0.0"
@@ -6184,6 +6256,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"svg-path-parser@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "svg-path-parser@npm:1.1.0"
+  checksum: bab42996b17151ee7ec40d199fa980f58492b1d662297a017eea1f5f85a0e3bbb78cdc0620bbd37d4fff7146854ef0c9ddbba7143a2fe58e1bd1e6accf48c613
+  languageName: node
+  linkType: hard
+
 "symbol-tree@npm:^3.2.4":
   version: 3.2.4
   resolution: "symbol-tree@npm:3.2.4"
@@ -6271,10 +6350,12 @@ __metadata:
     "@tailwindcss/forms": ^0.5.1
     "@trivago/prettier-plugin-sort-imports": ^3.2.0
     "@types/chroma-js": ^2
+    "@types/glob": ^7.2.0
     "@types/jsdom": ^16.2.14
     "@types/node": ^16.11.26
     "@types/offscreencanvas": ^2019.7.0
     "@types/prettier": ^2.6.3
+    "@types/svg-path-parser": ^1
     "@types/ungap__structured-clone": ^0.3.0
     "@types/uuid": ^8
     "@types/vue": ^2.0.0
@@ -6298,8 +6379,10 @@ __metadata:
     eslint: ^8.5.0
     eslint-plugin-cypress: ^2.12.1
     eslint-plugin-vue: ^8.2.0
+    glob: ^8.0.3
     iwanthue: ^2.0.0
     jsdom: ^19.0.0
+    mlly: ^0.5.3
     naive-ui: ^2.29.0
     pinia: ^2.0.13
     postcss: ^8.4.13
@@ -6307,6 +6390,7 @@ __metadata:
     pug: ^3.0.2
     sass: ^1.51.0
     start-server-and-test: ^1.14.0
+    svg-path-parser: ^1.1.0
     tailwindcss: ^3.0.24
     ts-deepmerge: ^2.0.1
     type-fest: ^2.13.0
@@ -6316,6 +6400,7 @@ __metadata:
     unplugin-vue-components: ^0.19.6
     uuid: ^8.3.2
     vite: ^2.9.1
+    vite-plugin-inspect: ^0.5.0
     vite-plugin-pages: ^0.23.0
     vite-plugin-static-copy: ^0.5.0
     vite-tsconfig-paths: ^3.4.1
@@ -6370,6 +6455,13 @@ __metadata:
   version: 1.0.0
   resolution: "token-stream@npm:1.0.0"
   checksum: e8adb56f31b813b6157130e7fc2fe14eb60e7cbf7b746e70e8293c7e55664d8e7ad5d93d7ae3aa4cad7fcb2b0aaf59dad6f2fd4ee0269204e55af5b05bc369e2
+  languageName: node
+  linkType: hard
+
+"totalist@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "totalist@npm:3.0.0"
+  checksum: ec499bddfc73d5b6c73f8ff68afd7bed286705797f928a11177fee5d1ee80e9052ffcb434638437702e16864bd5490f437a54f79bfea9564e875d34ed3254bca
   languageName: node
   linkType: hard
 
@@ -6533,6 +6625,13 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 1cb434fbc637d347be90e3a0c6cd05e33c38f941713c8786d3031faf1842c2c148ba91d2fac01e7276b0ae3249b8633f1660e32686cc7a8c6a8fd5361dc52c66
+  languageName: node
+  linkType: hard
+
+"ufo@npm:^0.8.3":
+  version: 0.8.4
+  resolution: "ufo@npm:0.8.4"
+  checksum: a2ebef6f64b9cc4114fc65405837eeb83eb8975edd6d54c7f37abb6905da6fd1f63524e4a02c8b087e7b0b3db6e6f4f798a3d86a96500410ff590b405f807dc9
   languageName: node
   linkType: hard
 
@@ -6788,6 +6887,21 @@ __metadata:
     core-util-is: 1.0.2
     extsprintf: ^1.2.0
   checksum: c431df0bedf2088b227a4e051e0ff4ca54df2c114096b0c01e1cbaadb021c30a04d7dd5b41ab277bcd51246ca135bf931d4c4c796ecae7a4fef6d744ecef36ea
+  languageName: node
+  linkType: hard
+
+"vite-plugin-inspect@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "vite-plugin-inspect@npm:0.5.0"
+  dependencies:
+    "@rollup/pluginutils": ^4.2.1
+    debug: ^4.3.4
+    kolorist: ^1.5.1
+    sirv: ^2.0.2
+    ufo: ^0.8.3
+  peerDependencies:
+    vite: ^2.9.0
+  checksum: 41c0fccb9389e9aac07315b121252aa5037c6a98b2bcc4285cf69e9e973608c023ad180396df42f922b9f1f4e275cb60414e32f4d0f711d8199159df441a0056
   languageName: node
   linkType: hard
 

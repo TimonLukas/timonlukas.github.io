@@ -16,8 +16,8 @@ n-form
 
 <script lang="ts" setup>
 import { useRouteQuery } from "@vueuse/router"
+import { pathToEntryMeta } from "@/fairytome/entries"
 import type { Entry } from "@/fairytome/entry"
-import { pathToEntryMeta } from "@/fairytome/entry"
 
 const props = defineProps<{ entries: Entry[]; modelValue: Entry | null }>()
 const emit = defineEmits<{

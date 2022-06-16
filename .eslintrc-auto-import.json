@@ -180,6 +180,8 @@
     "useRafFn": true,
     "useRefHistory": true,
     "useResizeObserver": true,
+    "useRoute": true,
+    "useRouter": true,
     "useScreenOrientation": true,
     "useScreenSafeArea": true,
     "useScriptTag": true,

@@ -53,5 +53,12 @@ function render() {
   ctx.restore()
 }
 
+watch(
+  () => points.length,
+  () => {
+    ctx?.clearRect(0, 0, width, height)
+  }
+)
+
 useRafFn(render)
 </script>
