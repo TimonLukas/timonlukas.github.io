@@ -6,6 +6,7 @@ import { NaiveUiResolver } from "unplugin-vue-components/resolvers"
 import unpluginComponents from "unplugin-vue-components/vite"
 import { fileURLToPath, URL } from "url"
 import { defineConfig } from "vite"
+import { comlink as vitePluginComlink } from "vite-plugin-comlink"
 import vitePluginInspect from "vite-plugin-inspect"
 import vitePluginPages from "vite-plugin-pages"
 import utils from "./packages/utilities/vite"
@@ -40,10 +41,14 @@ export default defineConfig({
         new URL("./packages/framework/types/components.d.ts", import.meta.url)
       ),
     }),
+    vitePluginComlink(),
     utils.plugins.ViteGenerateIndex({
       dirs: ["packages/*/components", "packages/framework/components/ui"],
       extension: "ts",
       excludeFiles: [/^.+(\.entry\.)/gm],
     }),
   ],
+  worker: {
+    plugins: [vitePluginComlink()],
+  },
 })
