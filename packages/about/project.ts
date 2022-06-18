@@ -17,20 +17,12 @@ export async function fetchFileSource(file: string): Promise<any> {
   return sourceWorker.fetchSource(file)
 }
 
-const prefixCache = new Map<string, ReturnType<typeof h>>()
 export function createRenderer(
   kind: "file" | "folder",
   key: string
 ): () => ReturnType<typeof h> {
-  if (!prefixCache.has(key)) {
-    const icon = kind === "file" ? getFileIcon(key) : getFolderIcon(key)
-    prefixCache.set(
-      key,
-      h(NIcon, { size: "1.25rem" }, { default: () => h(icon) })
-    )
-  }
-
-  return () => prefixCache.get(key)!
+  const icon = kind === "file" ? getFileIcon(key) : getFolderIcon(key)
+  return () => h(NIcon, { size: "1.25rem" }, { default: () => h(icon) })
 }
 
 type TreeFile = {

@@ -17,6 +17,9 @@ const fileIconsByExtension: Record<string, Icon> = {
   sass: icons.IconScss,
   vue: icons.IconVue,
   yml: icons.IconYaml,
+  ico: icons.IconImage,
+  png: icons.IconImage,
+  jpg: icons.IconImage,
 }
 
 function getFileIconByExtension(extension?: string): Icon {
