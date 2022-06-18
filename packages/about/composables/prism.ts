@@ -16,7 +16,7 @@ Prism.manual = true
 const EXTENSION_TO_LANGUAGE: Record<string, string> = {
   md: "markdown",
   ts: "typescript",
-  html: "markup",
+  html: "vue",
   cjs: "js",
   yml: "yaml",
   gitignore: "ignore",
@@ -44,7 +44,7 @@ export function usePrism(): {
 
     loadedLanguages.add(language)
 
-    if (extension === "vue") {
+    if (language === "vue") {
       Prism.languages.vue = Prism.languages.extend("markup", {})
     }
 

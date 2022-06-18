@@ -20,7 +20,7 @@
         :component="entry === null ? getIconForFolder(modelValue) : getIcon(entry)"
       )
     template(#header-extra)
-      n-switch(v-model:value="showInvisible")
+      n-switch(v-model:value="showInvisible" v-if="!isImage")
         template(#checked) Show invisibles
         template(#unchecked) Hide invisibles
     .code.h-full.line-numbers.match-braces.rainbow-braces(
@@ -29,10 +29,25 @@
       :class="[`language-${language}`, { 'show-invisible': showInvisible }]"
     )
       fade.h-full
-        pre.w-full.h-full(v-show="!isHighlighting")
+        pre.w-full.h-full(v-if="!isImage" v-show="!isHighlighting")
           code(ref="code") {{ source }}
+        .flex.flex-col.h-full.w-full.items-center.justify-center.relative.overflow-hidden(
+          v-else
+        )
+          .controls.absolute.top-4(class="w-1/2 z-[1]")
+            n-slider(
+              v-model:value="imageZoom"
+              :min="-10"
+              :max="10"
+              :step="0.01"
+              :format-tooltip="(value) => `x${(1.2 ** value).toFixed(2)}`"
+            )
+          img.img-preview.border-solid.border-black.origin-center(
+            :src="file"
+            :style="{ '--scale': imageScale }"
+          )
     fade.h-full(v-else)
-      suspense
+      suspense(v-if="!isImage")
         .h-full
           project-tree.h-full(v-model="model" :entries="subtree" class="m-l-[-1rem]")
         template(#fallback)
@@ -72,6 +87,15 @@ const filename = $computed(() => file?.split("/").at(-1))
 const extension = $computed(() => filename?.split(".").at(-1))
 const pathParts = $computed(() => file?.split("/").slice(1, -1))
 
+const isImage = $computed(
+  () =>
+    typeof extension !== "undefined" &&
+    ["ico", "png", "jpg"].includes(extension)
+)
+const imageZoom = ref(0)
+const debouncedZoom = refDebounced(imageZoom, 100)
+const imageScale = $computed(() => 1.2 ** debouncedZoom.value)
+
 const language = $computed((): string =>
   typeof extension === "undefined"
     ? "none"
@@ -81,7 +105,7 @@ const language = $computed((): string =>
 let isHighlighting = $ref(false)
 const code = ref()
 watch(source, async () => {
-  if (source.value === null) {
+  if (source.value === null || isImage) {
     return
   }
 
@@ -126,4 +150,9 @@ watch(source, async () => {
 
     :deep(.token)
       transition: opacity .5s
+
+  .img-preview
+    border: 1px solid black
+    transform: scale(var(--scale, 1))
+    transition: transform .5s
 </style>

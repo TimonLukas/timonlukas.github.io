@@ -2,12 +2,15 @@ import { NIcon } from "naive-ui"
 import { getFileIcon } from "./icons/file"
 import { getFolderIcon } from "./icons/folder"
 
-const allProjectFiles = [
-  ...Object.keys(import.meta.glob("/(*|!(dist|.git|.idea|.yarn)/**)")),
-]
+const importGlob = import.meta.glob("/(*|!(dist|.git|.idea|.yarn)/**)")
+const allProjectFiles = [...Object.keys(importGlob)]
 
 function fetchProjectFiles(): string[] {
   return allProjectFiles
+}
+
+export function fetchFileModule(file: string): Promise<any> | null {
+  return file in importGlob ? importGlob[file]() : null
 }
 
 const sourceWorker = new ComlinkWorker<typeof import("./source.worker")>(
