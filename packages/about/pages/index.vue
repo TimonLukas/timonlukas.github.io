@@ -11,14 +11,23 @@
           | About
     n-tabs.tabs.h-full.flex.flex-col(type="line" :animated="true")
       n-tab-pane.h-full(tab="General structure" name="general-structure")
-        component(:is="ProjectStructureExplorer")
+        fade.flex.h-full(duration=".5s" :transition="{ mode: 'in-out' }")
+          suspense
+            component(:is="ProjectStructureExplorer")
+            template(#fallback)
+              .flex.items-center.justify-center.w-full.h-full.absolute
+                n-spin(size="large")
       n-tab-pane.h-full(tab="Vite config" name="vite-config")
       n-tab-pane.h-full(tab="Custom plugins" name="custom-plugins")
 </template>
 
 <script lang="ts" setup>
-import { ProjectStructureExplorer } from "@/about/components"
+import { Fade } from "@/framework/components/transitions/index"
 import { BreadcrumbItem } from "@/framework/components/ui"
+
+const ProjectStructureExplorer = defineAsyncComponent(
+  () => import("@/about/components/ProjectStructureExplorer.vue")
+)
 </script>
 
 <style lang="sass" scoped>
@@ -27,5 +36,6 @@ import { BreadcrumbItem } from "@/framework/components/ui"
     height: calc(100% - 4rem)
 
   :deep(.tabs > .n-tabs-pane-wrapper)
-    height: 100%
+    height: calc(100% - 3rem)
+    overflow: visible
 </style>

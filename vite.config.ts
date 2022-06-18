@@ -43,7 +43,7 @@ export default defineConfig({
     }),
     vitePluginComlink(),
     utils.plugins.ViteGenerateIndex({
-      dirs: ["packages/*/components", "packages/framework/components/ui"],
+      dirs: ["packages/*/components", "packages/framework/components/**"],
       extension: "ts",
       excludeFiles: [/^.+(\.entry\.)/gm],
     }),

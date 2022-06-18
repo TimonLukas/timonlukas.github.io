@@ -7,6 +7,7 @@ const EXTENSION_TO_LANGUAGE: Record<string, string> = {
   md: "markdown",
   ts: "typescript",
   html: "cshtml",
+  cjs: "js",
 }
 
 export function getLanguageFromExtension(extension: string): string {

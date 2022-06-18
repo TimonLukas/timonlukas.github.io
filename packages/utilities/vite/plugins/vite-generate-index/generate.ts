@@ -1,3 +1,4 @@
+import camelCase from "lodash/camelCase"
 import fs from "node:fs/promises"
 import { basename } from "node:path"
 import { format } from "./format"
@@ -59,7 +60,7 @@ function fileInformationToExport({ exports, file }: FileInformation): string {
 
   const importPath = file.extension.includes("ts") ? file.name : file.basename
 
-  return `export * as ${file.name} from "./${importPath}"`
+  return `export * as ${camelCase(file.name)} from "./${importPath}"`
 }
 
 async function shouldUpdate(

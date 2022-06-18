@@ -439,6 +439,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iconify-json/vscode-icons@npm:^1.1.6":
+  version: 1.1.6
+  resolution: "@iconify-json/vscode-icons@npm:1.1.6"
+  dependencies:
+    "@iconify/types": ^1.1.0
+  checksum: 0d7b1b14ca7660b503a9c243447c414e52a0a4b181567d22838ce441bcc32586286ed9b4ae58015460f6e1974474a21e86f42fc59bc64cb7a6690c1fc5b928f1
+  languageName: node
+  linkType: hard
+
 "@iconify/types@npm:^1.0.12, @iconify/types@npm:^1.1.0":
   version: 1.1.0
   resolution: "@iconify/types@npm:1.1.0"
@@ -724,7 +733,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:*, @types/lodash@npm:^4.14.181":
+"@types/lodash@npm:*, @types/lodash@npm:^4, @types/lodash@npm:^4.14.181":
   version: 4.14.182
   resolution: "@types/lodash@npm:4.14.182"
   checksum: 7dd137aa9dbabd632408bd37009d984655164fa1ecc3f2b6eb94afe35bf0a5852cbab6183148d883e9c73a958b7fec9a9bcf7c8e45d41195add6a18c34958209
@@ -6365,6 +6374,7 @@ __metadata:
   resolution: "timonlukas.github.io@workspace:."
   dependencies:
     "@iconify-json/feather": ^1.1.1
+    "@iconify-json/vscode-icons": ^1.1.6
     "@prettier/plugin-pug": ^2.0.0
     "@rushstack/eslint-patch": ^1.1.0
     "@swan-io/boxed": ^0.9.0
@@ -6373,6 +6383,7 @@ __metadata:
     "@types/chroma-js": ^2
     "@types/glob": ^7.2.0
     "@types/jsdom": ^16.2.14
+    "@types/lodash": ^4
     "@types/node": ^16.11.26
     "@types/offscreencanvas": ^2019.7.0
     "@types/prettier": ^2.6.3
@@ -6405,6 +6416,7 @@ __metadata:
     glob: ^8.0.3
     iwanthue: ^2.0.0
     jsdom: ^19.0.0
+    lodash: ^4.17.21
     mlly: ^0.5.3
     naive-ui: ^2.29.0
     pinia: ^2.0.13
