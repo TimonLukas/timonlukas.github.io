@@ -20,9 +20,18 @@
         class="top-[3.2rem] left-[1rem]"
         :component="entry === null ? getIconForFolder(modelValue) : getIcon(entry)"
       )
-    .code.h-full(v-if="source !== null" class="pb-[.25rem] mt-[-.5rem]")
-      pre.w-full.h-full(:class="`language-${language}`")
-        code(ref="code" :class="`language-${language}`") {{ source }}
+    template(#header-extra)
+      n-switch(v-model:value="showInvisible")
+        template(#checked) Show invisibles
+        template(#unchecked) Hide invisibles
+    .code.h-full.line-numbers.match-braces.rainbow-braces(
+      v-if="source !== null"
+      class="pb-[.25rem] mt-[-.5rem]"
+      :class="[`language-${language}`, { 'show-invisible': showInvisible }]"
+    )
+      fade.h-full
+        pre.w-full.h-full(v-show="!isHighlighting")
+          code(ref="code") {{ source }}
     fade.h-full(v-else)
       suspense
         .h-full
@@ -57,12 +66,14 @@ const entry = $computed(
   () => props.subtree.find((node) => node.key === model.value) ?? null
 )
 
+let showInvisible = $ref(false)
+
 const file = $(model)
 const filename = $computed(() => file?.split("/").at(-1))
 const extension = $computed(() => filename?.split(".").at(-1))
 const pathParts = $computed(() => file?.split("/").slice(1, -1))
 
-const language = $computed(() =>
+const language = $computed((): string =>
   typeof extension === "undefined"
     ? "none"
     : getLanguageFromExtension(extension)
@@ -80,9 +91,13 @@ watch(source, async () => {
     await loadLanguage(extension)
   }
 
-  Prism.highlightElement(code.value, false, () => {
-    isHighlighting = false
-  })
+  setTimeout(
+    () =>
+      Prism.highlightElement(code.value, false, () => {
+        isHighlighting = false
+      }),
+    50
+  )
 })
 </script>
 
@@ -103,4 +118,13 @@ watch(source, async () => {
 
     :deep(.n-breadcrumb-item:first-child)
       pointer-events: none
+
+  .code
+    &:not(.show-invisible)
+      :deep(.token)
+        &.lf, &.space, &.tab, &.cr, &.crlf
+          opacity: 0
+
+    :deep(.token)
+      transition: opacity .5s
 </style>

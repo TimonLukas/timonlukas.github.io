@@ -13,9 +13,8 @@
       :data="tree"
       :node-props="generateProps"
       :show-irrelevant-nodes="true"
-      :expanded-keys="pattern.length > 0 ? ['/', ...subtree.map((node) => node.key)] : expandedKeys"
+      v-model:expanded-keys="currentExpandedKeys.value"
       :pattern="pattern"
-      @update:expanded-keys="(keys) => pattern.length === 0 && (expandedKeys = keys)"
       v-model:selected-keys="selectedKeys"
       v-bind="$attrs"
     )
@@ -23,12 +22,13 @@
 
 <script lang="ts" setup>
 import { NIcon } from "naive-ui"
+import type { Ref } from "vue"
 import { getFolderIcon } from "@/about/icons/folder"
 import { Fade } from "@/framework/components/transitions/index"
 import type { Tree, TreeNode } from "../project"
 import { isFolder } from "../project"
 
-let expandedKeys = $ref<string[]>(["/"])
+const expandedKeys = ref<string[]>(["/"])
 let selectedKeys = $ref<string[]>([])
 watch(
   () => selectedKeys,
@@ -61,6 +61,13 @@ watch(
     selectedKeys = [model.value]
   },
   { immediate: true }
+)
+
+const currentExpandedKeys = $computed(
+  (): Ref<string[]> =>
+    pattern.value.length > 0
+      ? ref(["/", ...subtree.map((node) => node.key)])
+      : expandedKeys
 )
 
 function filterSubtree(tree: Readonly<Tree>): Tree {
@@ -110,7 +117,7 @@ watch(
       return
     }
 
-    expandedKeys = entries.map(({ key }) => key)
+    expandedKeys.value = entries.map(({ key }) => key)
   },
   { immediate: true }
 )
