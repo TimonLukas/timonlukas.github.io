@@ -72,11 +72,6 @@ const currentExpandedKeys = $computed(
 
 function filterSubtree(tree: Readonly<Tree>): Tree {
   return tree
-    .filter(
-      (node) =>
-        node.key.includes(pattern.value) &&
-        (showDotEntries || !node.label.startsWith("."))
-    )
     .map((node) =>
       isFolder(node)
         ? {
@@ -84,6 +79,12 @@ function filterSubtree(tree: Readonly<Tree>): Tree {
             children: filterSubtree(node.children),
           }
         : node
+    )
+    .filter(
+      (node) =>
+        ((isFolder(node) && node.children.length > 0) ||
+          node.key.includes(pattern.value)) &&
+        (showDotEntries || !node.label.startsWith("."))
     )
 }
 const subtree = $computed(() => {
