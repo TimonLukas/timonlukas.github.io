@@ -17,17 +17,12 @@ jobs:
         with:
           node-version: "*"
       - name: Install dependencies
-        uses: Borales/actions-yarn@v3.0.0
-        with:
-          cmd: install
+        run: yarn
       - name: Build project
-        uses: Borales/actions-yarn@v3.0.0
-        with:
-          cmd: build
-      - run: sudo chmod -R +rw dist
+        run: yarn build
       - name: Build redbean executable
         uses: TimonLukas/action-static-redbean@v0.1
-      - run: sudo mv redbean.com dist/server.com
+      - run: mv redbean.com dist/server.com
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
