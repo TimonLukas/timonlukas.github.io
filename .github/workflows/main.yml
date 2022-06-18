@@ -24,6 +24,7 @@ jobs:
         uses: Borales/actions-yarn@v3.0.0
         with:
           cmd: build
+      - run: sudo chmod -R +rw dist
       - name: Build redbean executable
         uses: TimonLukas/action-static-redbean@v0.1
       - run: sudo mv redbean.com dist/server.com
