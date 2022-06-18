@@ -3,8 +3,7 @@ import { getFileIcon } from "./icons/file"
 import { getFolderIcon } from "./icons/folder"
 
 const allProjectFiles = [
-  ...Object.keys(import.meta.glob("/**/*")),
-  ...Object.keys(import.meta.glob("/**/.*")),
+  ...Object.keys(import.meta.glob("/(*|!(dist|.git|.idea|.yarn)/**)")),
 ]
 
 function fetchProjectFiles(): string[] {
