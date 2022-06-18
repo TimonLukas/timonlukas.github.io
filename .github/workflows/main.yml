@@ -21,7 +21,7 @@ jobs:
       - name: Build project
         run: yarn build
       - name: Build redbean executable
-        uses: TimonLukas/action-static-redbean@v0.2.1
+        uses: TimonLukas/action-static-redbean@v0.2.2
       - run: mv redbean.com dist/server.com
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
