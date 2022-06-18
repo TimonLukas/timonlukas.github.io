@@ -1,5 +1,5 @@
 <template lang="pug">
-.flex.h-full.w-full
+.explorer.flex.h-full.w-full
   .flex-none.border-solid.mr-4(class="border-r-[1px] ml-[-1rem] min-w-[20rem]")
     project-tree(:entries="tree" v-model="selectedKey" root)
   .flex-1.min-w-0.relative
@@ -28,3 +28,9 @@ const subtree = $computed(() =>
   selectedKey === null ? tree : findSubtreeByKey(selectedKey, tree)
 )
 </script>
+
+<style lang="sass" scoped>
+.explorer
+  background: var(--n-color)
+  z-index: 1
+</style>

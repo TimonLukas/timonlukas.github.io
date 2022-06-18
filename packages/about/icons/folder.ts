@@ -18,6 +18,11 @@ const specialFolderIcons: [test: IconTest, icon: Icon][] = [
   [testHasParent("dist"), icons.IconFolderBinary],
   [testIsKey("/packages"), icons.IconFolderApp],
   [testIsKey("/.yarn"), icons.IconFolderYarn],
+  [testIsKey("/packages/about"), icons.IconFeatherInfo],
+  [testIsKey("/packages/fairytome"), icons.IconFeatherBookOpen],
+  [testIsKey("/packages/framework"), icons.IconFeatherCode],
+  [testIsKey("/packages/home"), icons.IconFeatherHome],
+  [testIsKey("/packages/utilities"), icons.IconFeatherTool],
 ]
 
 function getSpecialFolderIcon(key: string): Icon | null {

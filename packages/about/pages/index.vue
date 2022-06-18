@@ -9,25 +9,64 @@
         n-breadcrumb-item
           n-icon.mr-1: i-feather-info
           | About
-    n-tabs.tabs.h-full.flex.flex-col(type="line" :animated="true")
-      n-tab-pane.h-full(tab="General structure" name="general-structure")
+    n-tabs.tabs.h-full.flex.flex-col(
+      type="line"
+      animated
+      v-model:value="activeTab"
+    )
+      n-tab-pane.h-full(
+        tab="General structure"
+        name="general-structure"
+        @transitionend="transitionEndHandler('general-structure', $event)"
+      )
         fade.flex.h-full(duration=".5s" :transition="{ mode: 'in-out' }")
-          suspense
-            component(:is="ProjectStructureExplorer")
-            template(#fallback)
-              .flex.items-center.justify-center.w-full.h-full.absolute
-                n-spin(size="large")
-      n-tab-pane.h-full(tab="Vite config" name="vite-config")
-      n-tab-pane.h-full(tab="Custom plugins" name="custom-plugins")
+          suspense(v-if="explorer !== null")
+            component(:is="explorer")
+        .flex.items-center.justify-center.w-full.h-full.absolute.top-0
+          n-spin(size="large")
+      n-tab-pane.h-full(
+        tab="Vite config"
+        name="vite-config"
+        @transitionend="transitionEndHandler('vite-config', $event)"
+      )
+      n-tab-pane.h-full(
+        tab="Custom plugins"
+        name="custom-plugins"
+        @transitionend="transitionEndHandler('custom-plugins', $event)"
+      )
 </template>
 
 <script lang="ts" setup>
+import { useRouteQuery } from "@vueuse/router"
 import { Fade } from "@/framework/components/transitions/index"
 import { BreadcrumbItem } from "@/framework/components/ui"
 
-const ProjectStructureExplorer = defineAsyncComponent(
-  () => import("@/about/components/ProjectStructureExplorer.vue")
+const TABS = {
+  "general-structure": "General structure",
+  "vite-config": "Vite config",
+  "custom-plugins": "Custom plugins",
+}
+type TabId = keyof typeof TABS
+
+let transitionDone = $ref(true)
+const activeTab = useRouteQuery<TabId>("tab", "general-structure")
+watch(activeTab, () => {
+  transitionDone = false
+})
+
+const explorer = $computed(() =>
+  activeTab.value === "general-structure" && transitionDone
+    ? defineAsyncComponent(
+        () => import("@/about/components/ProjectStructureExplorer.vue")
+      )
+    : null
 )
+
+function transitionEndHandler(name: TabId, event: TransitionEvent): void {
+  if (name === activeTab.value) {
+    transitionDone = true
+  }
+}
 </script>
 
 <style lang="sass" scoped>

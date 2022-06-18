@@ -23,6 +23,12 @@ export { default as IconPrettier } from "~icons/vscode-icons/file-type-prettier"
 export { default as IconGit } from "~icons/vscode-icons/file-type-git"
 export { default as IconEslint } from "~icons/vscode-icons/file-type-eslint"
 
+export { default as IconFeatherInfo } from "~icons/feather/info"
+export { default as IconFeatherBookOpen } from "~icons/feather/book-open"
+export { default as IconFeatherCode } from "~icons/feather/code"
+export { default as IconFeatherHome } from "~icons/feather/home"
+export { default as IconFeatherTool } from "~icons/feather/tool"
+
 export { default as IconDefaultFolder } from "~icons/vscode-icons/default-folder"
 export { default as IconRootFolder } from "~icons/vscode-icons/default-root-folder"
 export { default as IconFolderCypress } from "~icons/vscode-icons/folder-type-cypress"

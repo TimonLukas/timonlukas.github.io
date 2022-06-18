@@ -21,6 +21,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useRouteQuery } from "@vueuse/router"
 import { NIcon } from "naive-ui"
 import type { Ref } from "vue"
 import { getFolderIcon } from "@/about/icons/folder"
@@ -131,6 +132,10 @@ function generateProps({ option: node }: { option: TreeNode }) {
     class: {
       empty: !isFolder(node) || node.children.length === 0,
       dot: isDotEntry,
+      "is-package-root":
+        isFolder(node) &&
+        key.startsWith("/packages/") &&
+        key.split("/").length === 3,
     },
   }
 }
@@ -149,7 +154,15 @@ function handleInput(value: string) {
   query.value = value
   isLoading = true
 }
-let showDotEntries = $ref(true)
+let showDotEntriesQuery = $(useRouteQuery<"true" | "false">("dot", "false"))
+let showDotEntries = $computed({
+  get(): boolean {
+    return showDotEntriesQuery === "true"
+  },
+  set(value: boolean) {
+    showDotEntriesQuery = value ? "true" : "false"
+  },
+})
 </script>
 
 <style lang="sass" scoped>
@@ -186,6 +199,9 @@ let showDotEntries = $ref(true)
 
       &.even.visible
         background: rgba(0, 0, 0, 0.1)
+
+      &.is-package-root .n-tree-node-content__prefix
+        opacity: .75
 
   :deep(.n-empty)
     margin-top: 4rem
