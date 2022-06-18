@@ -171,6 +171,7 @@ let showDotEntries = $ref(true)
 
     &:nth-child(even)
       background: rgba(0, 0, 0, 0.05)
+      --n-node-color-hover: rgba(0, 0, 0, 0.075)
 
     > .n-tree-node
       padding: 3px 0
