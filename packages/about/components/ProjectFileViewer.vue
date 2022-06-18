@@ -68,7 +68,7 @@
 import { getLanguageFromExtension, usePrism } from "@/about/composables/prism"
 import { useSource } from "@/about/composables/source"
 import { getIcon, getIconForFolder } from "@/about/icons"
-import { fetchEntry } from "@/about/structure-entries"
+import { fetchEntry } from "@/about/structure"
 import { Fade } from "@/framework/components/transitions"
 import type { Tree } from "../project"
 import ProjectStructureEntry from "./ProjectStructureEntry.vue"

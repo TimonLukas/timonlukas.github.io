@@ -2,24 +2,16 @@ import { NIcon } from "naive-ui"
 import { getFileIcon } from "./icons/file"
 import { getFolderIcon } from "./icons/folder"
 
-const importGlob = import.meta.glob("/(*|!(dist|.git|.idea|.yarn)/**)", {
-  as: "raw",
-})
-const allProjectFiles = [...Object.keys(importGlob)]
-
-function fetchProjectFiles(): string[] {
-  return allProjectFiles
-}
-
-export function fetchFileModule(file: string): Promise<any> | null {
-  return file in importGlob ? importGlob[file]() : null
-}
-
 const sourceWorker = new ComlinkWorker<typeof import("./source.worker")>(
   new URL("./source.worker.ts", import.meta.url)
 )
+
 export async function fetchFileSource(file: string): Promise<any> {
   return sourceWorker.fetchSource(file)
+}
+
+function fetchProjectFiles(): Promise<string[]> {
+  return sourceWorker.fetchProjectFiles()
 }
 
 export function createRenderer(
@@ -41,8 +33,8 @@ type TreeFolder = TreeFile & {
 export type TreeNode = TreeFile | TreeFolder
 export type Tree = TreeNode[]
 
-export function fetchProjectTree(): Tree {
-  const allFiles = fetchProjectFiles()
+export async function fetchProjectTree(): Promise<Tree> {
+  const allFiles = await fetchProjectFiles()
 
   const tree = allFiles.reduce(
     (acc, val) => {

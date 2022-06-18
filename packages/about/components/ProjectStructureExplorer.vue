@@ -22,7 +22,7 @@ import { fetchProjectTree, findSubtreeByKey } from "../project"
 import ProjectFileViewer from "./ProjectFileViewer.vue"
 import ProjectTree from "./ProjectTree.vue"
 
-const tree = fetchProjectTree()
+const tree = await fetchProjectTree()
 const selectedKey = useRouteQuery<string | null>("path", null)
 
 onBeforeUnmount(() => {
