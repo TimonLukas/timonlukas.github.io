@@ -26,7 +26,7 @@ jobs:
           cmd: build
       - name: Build redbean executable
         uses: TimonLukas/action-static-redbean@v0.1
-      - run: cp redbean.com dist/server.com
+      - run: sudo mv redbean.com dist/server.com
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
