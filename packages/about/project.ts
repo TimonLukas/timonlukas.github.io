@@ -2,7 +2,9 @@ import { NIcon } from "naive-ui"
 import { getFileIcon } from "./icons/file"
 import { getFolderIcon } from "./icons/folder"
 
-const importGlob = import.meta.glob("/(*|!(dist|.git|.idea|.yarn)/**)")
+const importGlob = import.meta.glob("/(*|!(dist|.git|.idea|.yarn)/**)", {
+  as: "raw",
+})
 const allProjectFiles = [...Object.keys(importGlob)]
 
 function fetchProjectFiles(): string[] {

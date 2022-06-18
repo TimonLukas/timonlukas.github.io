@@ -1,4 +1,4 @@
-const entryImports = import.meta.glob("./**/*.md")
+const entryImports = import.meta.glob("./**/*.md", { as: "raw" })
 
 export function fetchEntryKeys(): string[] {
   return Object.keys(entryImports).map((key) => key.slice(1, -3))
