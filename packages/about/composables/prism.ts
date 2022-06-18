@@ -19,7 +19,6 @@ const EXTENSION_TO_LANGUAGE: Record<string, string> = {
   html: "markup",
   cjs: "js",
   yml: "yaml",
-  vue: "markup",
   gitignore: "ignore",
   gitattributes: "ignore",
   prettierignore: "ignore",
@@ -44,6 +43,10 @@ export function usePrism(): {
     }
 
     loadedLanguages.add(language)
+
+    if (extension === "vue") {
+      Prism.languages.vue = Prism.languages.extend("markup", {})
+    }
 
     const key = Object.keys(languageGlob).find((key) => key.includes(language))
 

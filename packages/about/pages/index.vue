@@ -17,27 +17,28 @@
       n-tab-pane.h-full(
         tab="General structure"
         name="general-structure"
-        @transitionend="transitionEndHandler('general-structure', $event)"
+        @transitionend.self="transitionEndHandler('general-structure', $event)"
       )
-        fade.flex.h-full(duration=".5s" :transition="{ mode: 'in-out' }")
+        fade.flex.h-full(duration=".5s" :transition="{ mode: 'out-in' }")
           suspense(v-if="explorer !== null")
-            component(:is="explorer")
+            component(:is="explorer" :key="activeTab")
         .flex.items-center.justify-center.w-full.h-full.absolute.top-0
           n-spin(size="large")
       n-tab-pane.h-full(
         tab="Vite config"
         name="vite-config"
-        @transitionend="transitionEndHandler('vite-config', $event)"
+        @transitionend.self="transitionEndHandler('vite-config', $event)"
       )
       n-tab-pane.h-full(
         tab="Custom plugins"
         name="custom-plugins"
-        @transitionend="transitionEndHandler('custom-plugins', $event)"
+        @transitionend.self="transitionEndHandler('custom-plugins', $event)"
       )
 </template>
 
 <script lang="ts" setup>
 import { useRouteQuery } from "@vueuse/router"
+import type { Component } from "vue"
 import { Fade } from "@/framework/components/transitions/index"
 import { BreadcrumbItem } from "@/framework/components/ui"
 
@@ -54,12 +55,19 @@ watch(activeTab, () => {
   transitionDone = false
 })
 
-const explorer = $computed(() =>
-  activeTab.value === "general-structure" && transitionDone
-    ? defineAsyncComponent(
-        () => import("@/about/components/ProjectStructureExplorer.vue")
-      )
-    : null
+const explorer = shallowRef<Component | null>(null)
+
+watch(
+  () => [transitionDone, activeTab],
+  () => {
+    explorer.value =
+      activeTab.value === "general-structure" && transitionDone
+        ? defineAsyncComponent(
+            () => import("@/about/components/ProjectStructureExplorer.vue")
+          )
+        : null
+  },
+  { immediate: true }
 )
 
 function transitionEndHandler(name: TabId, event: TransitionEvent): void {

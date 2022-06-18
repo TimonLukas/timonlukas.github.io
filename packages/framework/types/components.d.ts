@@ -10,8 +10,6 @@ declare module '@vue/runtime-core' {
     IFeatherHome: typeof import('~icons/feather/home')['default']
     IFeatherInfo: typeof import('~icons/feather/info')['default']
     IVscodeIconsDefaultFolder: typeof import('~icons/vscode-icons/default-folder')['default']
-    IVscodeIconsFileTypeVue: typeof import('~icons/vscode-icons/file-type-vue')['default']
-    IVscodeIconsVue: typeof import('~icons/vscode-icons/vue')['default']
     NBreadcrumb: typeof import('naive-ui')['NBreadcrumb']
     NBreadcrumbItem: typeof import('naive-ui')['NBreadcrumbItem']
     NCard: typeof import('naive-ui')['NCard']

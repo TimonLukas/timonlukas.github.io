@@ -9,9 +9,8 @@
           v-for="(part, index) in pathParts"
           @click="model = '/' + pathParts.slice(0, index + 1).join('/')"
         )
-          n-icon(
-            :component="getIconForFolder('/' + pathParts.slice(0, index + 1).join('/'))"
-            class="mr-[.5rem]"
+          n-icon(class="mr-[.5rem]"): component(
+            :is="getIconForFolder('/' + pathParts.slice(0, index + 1).join('/'))"
           )
           | {{ part }}
         n-breadcrumb-item

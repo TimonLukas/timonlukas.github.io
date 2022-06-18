@@ -16,16 +16,21 @@
 </template>
 
 <script lang="ts" setup>
+import { useRouteQuery } from "@vueuse/router"
 import { Fade } from "@/framework/components/transitions"
 import { fetchProjectTree, findSubtreeByKey } from "../project"
 import ProjectFileViewer from "./ProjectFileViewer.vue"
 import ProjectTree from "./ProjectTree.vue"
 
 const tree = fetchProjectTree()
-const selectedKey = $ref<string | null>(null)
+const selectedKey = useRouteQuery<string | null>("path", null)
+
+onBeforeUnmount(() => {
+  selectedKey.value = null
+})
 
 const subtree = $computed(() =>
-  selectedKey === null ? tree : findSubtreeByKey(selectedKey, tree)
+  selectedKey.value === null ? tree : findSubtreeByKey(selectedKey.value, tree)
 )
 </script>
 
