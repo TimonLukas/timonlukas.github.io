@@ -28,6 +28,7 @@ const specialFolderIcons: [test: IconTest, icon: Icon][] = [
   [testHasParent("dist"), icons.IconFolderBinary],
   [testIsKey("/packages"), icons.IconFolderApp],
   [testIsKey("/.yarn"), icons.IconFolderYarn],
+  [testHasParent(".github"), icons.IconFolderGithub],
   [testHasParent("types"), icons.IconFolderTypescript],
   [testHasParent("assets"), icons.IconFolderAsset],
   [testHasParent("icons"), icons.IconFolderImages],
