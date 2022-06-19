@@ -1,4 +1,4 @@
-const T=Symbol("Comlink.proxy"),S=Symbol("Comlink.endpoint"),R=Symbol("Comlink.releaseProxy"),g=Symbol("Comlink.thrown"),N=e=>typeof e=="object"&&e!==null||typeof e=="function",E={canHandle:e=>N(e)&&e[T],serialize(e){const{port1:n,port2:d}=new MessageChannel;return k(e,n),[d,[d]]},deserialize(e){return e.start(),C(e)}},M={canHandle:e=>N(e)&&g in e,serialize({value:e}){let n;return e instanceof Error?n={isError:!0,value:{message:e.message,name:e.name,stack:e.stack}}:n={isError:!1,value:e},[n,[]]},deserialize(e){throw e.isError?Object.assign(new Error(e.value.message),e.value):e.value}},w=new Map([["proxy",E],["throw",M]]);function k(e,n=self){n.addEventListener("message",function d(s){if(!s||!s.data)return;const{id:r,type:p,path:a}=Object.assign({path:[]},s.data),f=(s.data.argumentList||[]).map(t);let c;try{const b=a.slice(0,-1).reduce((i,m)=>i[m],e),o=a.reduce((i,m)=>i[m],e);switch(p){case"GET":c=o;break;case"SET":b[a.slice(-1)[0]]=t(s.data.value),c=!0;break;case"APPLY":c=o.apply(b,f);break;case"CONSTRUCT":{const i=new o(...f);c=z(i)}break;case"ENDPOINT":{const{port1:i,port2:m}=new MessageChannel;k(e,m),c=I(i,[i])}break;case"RELEASE":c=void 0;break;default:return}}catch(b){c={value:b,[g]:0}}Promise.resolve(c).catch(b=>({value:b,[g]:0})).then(b=>{const[o,i]=y(b);n.postMessage(Object.assign(Object.assign({},o),{id:r}),i),p==="RELEASE"&&(n.removeEventListener("message",d),j(n))})}),n.start&&n.start()}function O(e){return e.constructor.name==="MessagePort"}function j(e){O(e)&&e.close()}function C(e,n){return h(e,[],n)}function u(e){if(e)throw new Error("Proxy has been released and is not useable")}function h(e,n=[],d=function(){}){let s=!1;const r=new Proxy(d,{get(p,a){if(u(s),a===R)return()=>l(e,{type:"RELEASE",path:n.map(f=>f.toString())}).then(()=>{j(e),s=!0});if(a==="then"){if(n.length===0)return{then:()=>r};const f=l(e,{type:"GET",path:n.map(c=>c.toString())}).then(t);return f.then.bind(f)}return h(e,[...n,a])},set(p,a,f){u(s);const[c,b]=y(f);return l(e,{type:"SET",path:[...n,a].map(o=>o.toString()),value:c},b).then(t)},apply(p,a,f){u(s);const c=n[n.length-1];if(c===S)return l(e,{type:"ENDPOINT"}).then(t);if(c==="bind")return h(e,n.slice(0,-1));const[b,o]=v(f);return l(e,{type:"APPLY",path:n.map(i=>i.toString()),argumentList:b},o).then(t)},construct(p,a){u(s);const[f,c]=v(a);return l(e,{type:"CONSTRUCT",path:n.map(b=>b.toString()),argumentList:f},c).then(t)}});return r}function P(e){return Array.prototype.concat.apply([],e)}function v(e){const n=e.map(y);return[n.map(d=>d[0]),P(n.map(d=>d[1]))]}const x=new WeakMap;function I(e,n){return x.set(e,n),e}function z(e){return Object.assign(e,{[T]:!0})}function y(e){for(const[n,d]of w)if(d.canHandle(e)){const[s,r]=d.serialize(e);return[{type:"HANDLER",name:n,value:s},r]}return[{type:"RAW",value:e},x.get(e)||[]]}function t(e){switch(e.type){case"HANDLER":return w.get(e.name).deserialize(e.value);case"RAW":return e.value}}function l(e,n,d){return new Promise(s=>{const r=A();e.addEventListener("message",function p(a){!a.data||!a.data.id||a.data.id!==r||(e.removeEventListener("message",p),s(a.data))}),e.start&&e.start(),e.postMessage(Object.assign({id:r},n),d)})}function A(){return new Array(4).fill(0).map(()=>Math.floor(Math.random()*Number.MAX_SAFE_INTEGER).toString(16)).join("-")}const D={"/.eslintrc-auto-import.json":`{
+const T=Symbol("Comlink.proxy"),j=Symbol("Comlink.endpoint"),E=Symbol("Comlink.releaseProxy"),g=Symbol("Comlink.thrown"),N=e=>typeof e=="object"&&e!==null||typeof e=="function",P={canHandle:e=>N(e)&&e[T],serialize(e){const{port1:n,port2:o}=new MessageChannel;return y(e,n),[o,[o]]},deserialize(e){return e.start(),R(e)}},C={canHandle:e=>N(e)&&g in e,serialize({value:e}){let n;return e instanceof Error?n={isError:!0,value:{message:e.message,name:e.name,stack:e.stack}}:n={isError:!1,value:e},[n,[]]},deserialize(e){throw e.isError?Object.assign(new Error(e.value.message),e.value):e.value}},x=new Map([["proxy",P],["throw",C]]);function y(e,n=self){n.addEventListener("message",function o(s){if(!s||!s.data)return;const{id:i,type:f,path:a}=Object.assign({path:[]},s.data),t=(s.data.argumentList||[]).map(p);let c;try{const d=a.slice(0,-1).reduce((r,l)=>r[l],e),u=a.reduce((r,l)=>r[l],e);switch(f){case"GET":c=u;break;case"SET":d[a.slice(-1)[0]]=p(s.data.value),c=!0;break;case"APPLY":c=u.apply(d,t);break;case"CONSTRUCT":{const r=new u(...t);c=D(r)}break;case"ENDPOINT":{const{port1:r,port2:l}=new MessageChannel;y(e,l),c=O(r,[r])}break;case"RELEASE":c=void 0;break;default:return}}catch(d){c={value:d,[g]:0}}Promise.resolve(c).catch(d=>({value:d,[g]:0})).then(d=>{const[u,r]=v(d);n.postMessage(Object.assign(Object.assign({},u),{id:i}),r),f==="RELEASE"&&(n.removeEventListener("message",o),w(n))})}),n.start&&n.start()}function S(e){return e.constructor.name==="MessagePort"}function w(e){S(e)&&e.close()}function R(e,n){return h(e,[],n)}function m(e){if(e)throw new Error("Proxy has been released and is not useable")}function h(e,n=[],o=function(){}){let s=!1;const i=new Proxy(o,{get(f,a){if(m(s),a===E)return()=>b(e,{type:"RELEASE",path:n.map(t=>t.toString())}).then(()=>{w(e),s=!0});if(a==="then"){if(n.length===0)return{then:()=>i};const t=b(e,{type:"GET",path:n.map(c=>c.toString())}).then(p);return t.then.bind(t)}return h(e,[...n,a])},set(f,a,t){m(s);const[c,d]=v(t);return b(e,{type:"SET",path:[...n,a].map(u=>u.toString()),value:c},d).then(p)},apply(f,a,t){m(s);const c=n[n.length-1];if(c===j)return b(e,{type:"ENDPOINT"}).then(p);if(c==="bind")return h(e,n.slice(0,-1));const[d,u]=k(t);return b(e,{type:"APPLY",path:n.map(r=>r.toString()),argumentList:d},u).then(p)},construct(f,a){m(s);const[t,c]=k(a);return b(e,{type:"CONSTRUCT",path:n.map(d=>d.toString()),argumentList:t},c).then(p)}});return i}function F(e){return Array.prototype.concat.apply([],e)}function k(e){const n=e.map(v);return[n.map(o=>o[0]),F(n.map(o=>o[1]))]}const A=new WeakMap;function O(e,n){return A.set(e,n),e}function D(e){return Object.assign(e,{[T]:!0})}function v(e){for(const[n,o]of x)if(o.canHandle(e)){const[s,i]=o.serialize(e);return[{type:"HANDLER",name:n,value:s},i]}return[{type:"RAW",value:e},A.get(e)||[]]}function p(e){switch(e.type){case"HANDLER":return x.get(e.name).deserialize(e.value);case"RAW":return e.value}}function b(e,n,o){return new Promise(s=>{const i=M();e.addEventListener("message",function f(a){!a.data||!a.data.id||a.data.id!==i||(e.removeEventListener("message",f),s(a.data))}),e.start&&e.start(),e.postMessage(Object.assign({id:i},n),o)})}function M(){return new Array(4).fill(0).map(()=>Math.floor(Math.random()*Number.MAX_SAFE_INTEGER).toString(16)).join("-")}const I={"/.eslintrc-auto-import.json":`{
   "globals": {
     "EffectScope": true,
     "asyncComputed": true,
@@ -284,48 +284,6 @@ module.exports = {
     },
   ],
 }
-`,"/.gitattributes":`.yarn/cache/* linguist-vendored
-.pnp.* linguist-generated=true
-packages/framework/types/* linguist-generated=true
-.eslintrc.js linguist-generated=true
-`,"/.gitignore":`# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-.DS_Store
-dist
-dist-ssr
-coverage
-*.local
-
-/cypress/videos/
-/cypress/screenshots/
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-.eslintcache
-
-.yarn/*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
 `,"/.prettierignore":`packages/framework/types/*
 `,"/.prettierrc":`{
   "semi": false,
@@ -335,13 +293,6 @@ coverage
   "pugSingleQuote": false,
   "pugAttributeSeparator": "none"
 }
-`,"/.yarnrc.yml":`nodeLinker: node-modules
-
-plugins:
-  - path: .yarn/plugins/@yarnpkg/plugin-typescript.cjs
-    spec: "@yarnpkg/plugin-typescript"
-
-yarnPath: .yarn/releases/yarn-3.2.0.cjs
 `,"/LICENSE":`MIT License
 
 Copyright (c) 2022 Timon Lukas
@@ -8239,4 +8190,3264 @@ jobs:
         with:
           branch: gh-pages
           folder: dist
-`};async function L(){return Object.keys(D)}async function q(e){var n;return(n=D[e])!=null?n:null}var F=Object.freeze({__proto__:null,fetchProjectFiles:L,fetchSource:q});k(F);
+`,"/cypress/fixtures/example.json":`{
+  "name": "Using fixtures to represent data",
+  "email": "hello@cypress.io",
+  "body": "Fixtures are a great way to mock data for responses to routes"
+}
+`,"/cypress/integration/example.spec.ts":`// https://docs.cypress.io/api/introduction/api.html
+
+describe("My First Test", () => {
+  it("visits the app root url", () => {
+    cy.visit("/")
+    cy.contains("h1", "You did it!")
+  })
+})
+`,"/cypress/plugins/index.ts":`/* eslint-env node */
+// ***********************************************************
+// This example plugins/index.ts can be used to load plugins
+//
+// You can change the location of this file or turn off loading
+// the plugins file with the 'pluginsFile' configuration option.
+//
+// You can read more here:
+// https://on.cypress.io/plugins-guide
+// ***********************************************************
+
+// This function is called when a project is opened or re-opened (e.g. due to
+// the project's config changing)
+
+export default ((on, config) => {
+  // \`on\` is used to hook into various events Cypress emits
+  // \`config\` is the resolved Cypress config
+  return config
+}) as Cypress.PluginConfig
+`,"/cypress/plugins/tsconfig.json":`{
+  "extends": "@vue/tsconfig/tsconfig.node.json",
+  "include": ["./**/*"],
+  "compilerOptions": {
+    "module": "CommonJS",
+    "preserveValueImports": false,
+    "types": ["node", "cypress/types/cypress"]
+  }
+}
+`,"/cypress/support/commands.ts":`// ***********************************************
+// This example commands.js shows you how to
+// create various custom commands and overwrite
+// existing commands.
+//
+// For more comprehensive examples of custom
+// commands please read more here:
+// https://on.cypress.io/custom-commands
+// ***********************************************
+//
+//
+// -- This is a parent command --
+// Cypress.Commands.add('login', (email, password) => { ... })
+//
+//
+// -- This is a child command --
+// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
+//
+//
+// -- This is a dual command --
+// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
+//
+//
+// -- This will overwrite an existing command --
+// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+`,"/cypress/support/index.ts":`// ***********************************************************
+// This example support/index.js is processed and
+// loaded automatically before your test files.
+//
+// This is a great place to put global configuration and
+// behavior that modifies Cypress.
+//
+// You can change the location of this file or turn off
+// automatically serving support files with the
+// 'supportFile' configuration option.
+//
+// You can read more here:
+// https://on.cypress.io/configuration
+// ***********************************************************
+// Import commands.js using ES2015 syntax:
+import "./commands"
+
+// Alternatively you can use CommonJS syntax:
+// require('./commands')
+`,"/packages/about/project.ts":`import { NIcon } from "naive-ui"
+import { getFileIcon } from "./icons/file"
+import { getFolderIcon } from "./icons/folder"
+
+const sourceWorker = new ComlinkWorker<typeof import("./source.worker")>(
+  new URL("./source.worker.ts", import.meta.url)
+)
+
+export async function fetchFileSource(file: string): Promise<any> {
+  return sourceWorker.fetchSource(file)
+}
+
+function fetchProjectFiles(): Promise<string[]> {
+  return sourceWorker.fetchProjectFiles()
+}
+
+export function createRenderer(
+  kind: "file" | "folder",
+  key: string
+): () => ReturnType<typeof h> {
+  const icon = kind === "file" ? getFileIcon(key) : getFolderIcon(key)
+  return () => h(NIcon, { size: "1.25rem" }, { default: () => h(icon) })
+}
+
+type TreeFile = {
+  key: string
+  label: string
+  prefix: () => ReturnType<typeof h>
+}
+type TreeFolder = TreeFile & {
+  children: (TreeFile | TreeFolder)[]
+}
+export type TreeNode = TreeFile | TreeFolder
+export type Tree = TreeNode[]
+
+export async function fetchProjectTree(): Promise<Tree> {
+  const allFiles = await fetchProjectFiles()
+
+  const tree = allFiles.reduce(
+    (acc, val) => {
+      const parts = val.split("/").slice(1)
+      const ancestorParts = parts.slice(0, -1)
+
+      const parent = ancestorParts.reduce((container, name, index) => {
+        const key = \`/\${ancestorParts.slice(0, index + 1).join("/")}\`
+        const entry = container.find((value) => value.key === key)
+
+        if (typeof entry === "undefined" || !("children" in entry)) {
+          const newEntry = {
+            key,
+            label: \`\${name}/\`,
+            children: [],
+            prefix: createRenderer("folder", key),
+          }
+          container.push(newEntry)
+          return newEntry.children
+        }
+
+        return entry.children
+      }, acc)
+
+      const label = parts.at(-1) ?? val
+      parent.push({
+        key: val,
+        label,
+        prefix: createRenderer("file", val),
+      })
+
+      return acc
+    },
+    [
+      {
+        key: "/.yarn",
+        label: ".yarn",
+        children: [],
+        prefix: createRenderer("folder", "/.yarn"),
+      },
+    ] as Tree
+  )
+  sortTree(tree)
+
+  return tree
+}
+
+function sortTree(tree: Tree): void {
+  tree.sort((a, b) => {
+    if (isFile(a) && isFolder(b)) {
+      return 1
+    }
+
+    if (isFolder(a) && isFile(b)) {
+      return -1
+    }
+
+    return a.label.localeCompare(b.label)
+  })
+
+  tree.forEach((node) => {
+    if (!isFolder(node)) {
+      return
+    }
+
+    sortTree(node.children)
+  })
+}
+
+function flattenTree(tree: Tree): TreeNode[] {
+  return tree.flatMap((node) =>
+    isFolder(node) ? [...flattenTree(node.children), node] : node
+  )
+}
+
+export function findSubtreeByKey(key: string, tree: Tree): Tree {
+  const parts = key.split("/").slice(1)
+  return parts.reduce((acc, val, index) => {
+    const currentKey = "/" + parts.slice(0, index + 1).join("/")
+    const entry = acc.find((value) => value.key === currentKey)
+
+    if (typeof entry === "undefined" || !("children" in entry)) {
+      return acc
+    }
+
+    return entry.children
+  }, tree)
+}
+
+export function isFolder(node: TreeNode): node is TreeFolder {
+  return "children" in node
+}
+
+export function isFile(node: TreeNode): node is TreeFile {
+  return !isFolder(node)
+}
+`,"/packages/about/source.worker.ts":`const allProjectFiles = import.meta.glob<string>(
+  "/(!(dist|.git|.idea|.yarn)|.github)/**",
+  {
+    as: "raw",
+  }
+) as unknown as Record<string, string>
+
+export async function fetchProjectFiles(): Promise<string[]> {
+  return Object.keys(allProjectFiles)
+}
+
+export async function fetchSource(filename: string): Promise<string | null> {
+  return allProjectFiles[filename] ?? null
+}
+`,"/packages/fairytome/entries.ts":`import { markRaw, reactive, resolveDynamicComponent } from "vue"
+import type { Entry } from "@/fairytome/entry"
+
+const entryFiles = Object.assign(
+  {},
+  import.meta.glob("/packages/**/*.entry.ts"),
+  import.meta.glob("/packages/**/*.entry.vue")
+)
+
+type Entries = { entries: Entry[]; entriesByName: Map<string, Entry> }
+
+export function pathToEntryMeta(
+  path: string
+): Pick<Entry, "name" | "package" | "path"> {
+  const parts = path.replace("/packages/", "").split("/")
+  const packageName = parts[0]
+  const name = parts.at(-1) ?? path
+  const rest =
+    parts.length > 2 ? parts.slice(1, parts.length - 1).join("/") : ""
+
+  return {
+    name: name.includes(".entry.")
+      ? name.slice(0, name.indexOf(".entry."))
+      : name,
+    package: packageName,
+    path: rest,
+  }
+}
+
+export async function fetchEntries(): Promise<Entries> {
+  const entries = (
+    await Promise.all(
+      Object.entries(entryFiles).map(async ([filename, importer]) => {
+        const meta = pathToEntryMeta(filename)
+
+        const component = await importer()
+        const { entry } = component
+
+        if (typeof entry === "undefined") {
+          return null
+        }
+
+        return {
+          ...entry,
+          component: resolveDynamicComponent(
+            markRaw(
+              "default" in component ? component.default : entry.component
+            )
+          ),
+          ...meta,
+        }
+      })
+    )
+  ).filter((value) => value !== null) as Entry[]
+
+  const entriesByName = entries.reduce(
+    (acc, val) => acc.set(val.name, val),
+    new Map<string, Entry>()
+  )
+
+  return {
+    entries,
+    entriesByName,
+  }
+}
+
+export function useEntries(): Entries {
+  const refs = reactive<Entries>({
+    entries: [],
+    entriesByName: new Map<string, Entry>(),
+  })
+
+  fetchEntries().then(({ entries, entriesByName }) => {
+    refs.entries = entries
+    refs.entriesByName = entriesByName
+  })
+
+  return refs
+}
+`,"/packages/fairytome/entry.ts":`import type { Component } from "vue"
+
+type BaseOption<InitialType> = {
+  type: string
+  label: string
+  initial: InitialType
+  amount?: {
+    min: number
+    max?: number
+  }
+}
+
+type OptionTypes = {
+  Range: BaseOption<number> & {
+    type: "range"
+    min: number
+    max: number
+    step: number
+  }
+  Text: BaseOption<string> & {
+    type: "text"
+    length?: {
+      min?: number
+      max?: number
+    }
+  }
+  Color: BaseOption<string> & {
+    type: "color"
+  }
+  Checkbox: BaseOption<boolean> & {
+    type: "checkbox"
+  }
+}
+
+export type EntryOption = OptionTypes[keyof OptionTypes]
+
+type ComponentProps<C extends Component> = C extends Component<infer Props>
+  ? Props
+  : never
+export type Entry<C extends Component = Component> = {
+  name: string
+  package: string
+  path: string
+  component: Component
+  controls: Record<keyof ComponentProps<C>, EntryOption>
+  overrides?: { [Key in keyof ComponentProps<C>]: ComponentProps<C>[Key] }
+  stage?: Component
+}
+
+export function createEntry<T extends Component>(
+  entry: Omit<Entry<T>, "name" | "package" | "path">
+) {
+  return entry as Entry<T>
+}
+`,"/packages/framework/App.vue":`<template lang="pug">
+palette(seed="abcdefghi" :offset="paletteOffset + manualPaletteOffset")
+  .app.w-screen.h-screen.overflow-hidden(:class="{ loaded }")
+    .content.absolute.w-full.h-full(class="z-[5]")
+      router-view(v-slot="{ Component }")
+        transition(name="fade")
+          component(:is="Component")
+    background.absolute.top-0.left-0.w-full.h-full.z-0(:blob-amount="0")
+</template>
+
+<script lang="ts" setup>
+import { useRoute } from "vue-router"
+import Background from "@/framework/components/Background.vue"
+import Palette from "./components/Palette.vue"
+
+let loaded = $ref(false)
+onMounted(() =>
+  setTimeout(() => {
+    loaded = true
+  }, 50)
+)
+
+const route = useRoute()
+const manualPaletteOffset = ref(0)
+const paletteOffset = computed(() => {
+  if (route.fullPath.includes("fairytome")) {
+    return 1
+  }
+
+  if (route.fullPath.includes("about")) {
+    return 2
+  }
+
+  return 0
+})
+<\/script>
+
+<style lang="sass" scoped>
+.app.loaded
+  transition: 1s
+  transition-property: var(--theme-colors)
+
+  .content
+    > *
+      position: absolute
+      top: 0
+      left: 0
+
+      &.fade
+        &-enter-active, &-leave-active
+          transition: opacity .5s
+
+        &-enter-from, &-leave-to
+          opacity: 0
+</style>
+`,"/packages/framework/constants.ts":`export const PALETTE_COLOR_COUNT = 8
+`,"/packages/framework/main.ts":`import { createApp } from "vue"
+import { createRouter, createWebHistory } from "vue-router"
+import routes from "~pages"
+import App from "./App.vue"
+import "./assets/style.css"
+
+createApp(App)
+  .use(createRouter({ history: createWebHistory(), routes }))
+  .mount("#app")
+`,"/packages/utilities/glob.ts":`const REGEX_GLOB_TO_FILENAME = /\\.\\/(.+)\\.ts/
+
+type FilenameGlob = \`./\${string}.ts\`
+type GlobToFilename<GlobString extends FilenameGlob> =
+  GlobString extends \`./\${infer Filename}.ts\` ? Filename : never
+
+export function globToFilename<GlobString extends FilenameGlob>(
+  glob: GlobString
+): GlobToFilename<GlobString> {
+  const result = REGEX_GLOB_TO_FILENAME.exec(glob)
+
+  if (result === null) {
+    throw new Error(
+      \`Input must have format \${REGEX_GLOB_TO_FILENAME.source}, given: \${glob}\`
+    )
+  }
+
+  return result[1] as GlobToFilename<GlobString>
+}
+`,"/packages/utilities/math.ts":`export function randomBetween(start = 0, end = 1): number {
+  return start + Math.random() * (end - start)
+}
+
+export type RandomJitter = number | Readonly<[number, number]>
+export function randomAround(center: number, jitter: RandomJitter): number {
+  if (Array.isArray(jitter)) {
+    return randomBetween(center - jitter[0], center + jitter[1])
+  }
+
+  const jitterNumber = jitter as number
+  return randomBetween(center - jitterNumber, center + jitterNumber)
+}
+`,"/packages/about/components/ProjectFileViewer.vue":`<template lang="pug">
+.project-file-viewer.flex.items-center.justify-center.min-w-0
+  n-card.relative.h-full.w-full.min-w-0(v-if="file !== null" :title="filename")
+    template(#cover)
+      n-breadcrumb.path
+        n-breadcrumb-item
+          n-icon(:component="getIconForFolder('/')" class="mr-[.5rem]")
+        n-breadcrumb-item(
+          v-for="(part, index) in pathParts"
+          @click="model = '/' + pathParts.slice(0, index + 1).join('/')"
+        )
+          n-icon(class="mr-[.5rem]"): component(
+            :is="getIconForFolder('/' + pathParts.slice(0, index + 1).join('/'))"
+          )
+          | {{ part }}
+        n-breadcrumb-item
+      n-icon.absolute(
+        size="24px"
+        class="top-[3.2rem] left-[1rem]"
+        :component="entry === null ? getIconForFolder(modelValue) : getIcon(entry)"
+      )
+    .flex.h-full
+      .code.relative.flex-1.h-full.line-numbers.match-braces.rainbow-braces(
+        v-if="source !== null"
+        class="pb-[.25rem] mt-[-.5rem]"
+        :class="[\`language-\${language}\`, { 'show-invisible': showInvisible }]"
+      )
+        n-switch.absolute.right-0(
+          class="top-[-2rem]"
+          v-model:value="showInvisible"
+          v-if="!isImage"
+        )
+          template(#checked) Show invisibles
+          template(#unchecked) Hide invisibles
+        fade.h-full
+          pre.w-full.h-full(v-if="!isImage" v-show="!isHighlighting")
+            code(ref="code") {{ source }}
+          .flex.flex-col.h-full.w-full.items-center.justify-center.relative.overflow-hidden(
+            v-else
+          )
+            .controls.absolute.top-4(class="w-1/2 z-[1]")
+              n-slider(
+                v-model:value="imageZoom"
+                :min="-10"
+                :max="10"
+                :step="0.01"
+                :format-tooltip="(value) => \`x\${(1.2 ** value).toFixed(2)}\`"
+              )
+            img.img-preview.border-solid.border-black.origin-center(
+              :src="file"
+              :style="{ '--scale': imageScale }"
+            )
+      fade.h-full.flex-1(v-else)
+        suspense(v-if="!isImage")
+          .h-full
+            project-tree.h-full(v-model="model" :entries="subtree" class="m-l-[-1rem]")
+          template(#fallback)
+            .absolute.w-full.h-full.top-0.left-0.flex.items-center.justify-center
+              n-spin
+      .flex-1.ml-4(v-if="structureEntry !== null")
+        project-structure-entry(:markdown-source="structureEntry")
+  .flex.flex-col.items-center.opacity-50(v-else)
+    n-icon(size="4rem"): i-feather-file-text
+    n-h2 No file selected
+</template>
+
+<script lang="ts" setup>
+import { getLanguageFromExtension, usePrism } from "@/about/composables/prism"
+import { useSource } from "@/about/composables/source"
+import { getIcon, getIconForFolder } from "@/about/icons"
+import { fetchEntry } from "@/about/structure"
+import { Fade } from "@/framework/components/transitions"
+import type { Tree } from "../project"
+import ProjectStructureEntry from "./ProjectStructureEntry.vue"
+
+const ProjectTree = defineAsyncComponent(() => import("./ProjectTree.vue"))
+
+const { Prism, loadLanguage } = usePrism()
+
+const props = defineProps<{ modelValue: string | null; subtree: Tree }>()
+const emit = defineEmits<{
+  (event: "update:modelValue", payload: string): void
+}>()
+const model = useVModel(props, "modelValue", emit)
+const source = useSource(model)
+
+const entry = $computed(
+  () => props.subtree.find((node) => node.key === model.value) ?? null
+)
+
+let showInvisible = $ref(false)
+
+const file = $(model)
+const filename = $computed(() => file?.split("/").at(-1))
+const extension = $computed(() => filename?.split(".").at(-1))
+const pathParts = $computed(() => file?.split("/").slice(1, -1))
+
+let structureEntry = $ref(null)
+watch(
+  model,
+  async (value) => {
+    structureEntry = null
+
+    if (value !== null) {
+      structureEntry = await fetchEntry(value)
+    }
+  },
+  { immediate: true }
+)
+
+const isImage = $computed(
+  () =>
+    typeof extension !== "undefined" &&
+    ["ico", "png", "jpg"].includes(extension)
+)
+const imageZoom = ref(0)
+const debouncedZoom = refDebounced(imageZoom, 100)
+const imageScale = $computed(() => 1.2 ** debouncedZoom.value)
+
+const language = $computed((): string =>
+  typeof extension === "undefined"
+    ? "none"
+    : getLanguageFromExtension(extension)
+)
+
+let isHighlighting = $ref(false)
+const code = ref()
+watch(source, async () => {
+  if (source.value === null || isImage) {
+    return
+  }
+
+  isHighlighting = true
+  if (typeof extension !== "undefined") {
+    await loadLanguage(extension)
+  }
+
+  setTimeout(
+    () =>
+      Prism.highlightElement(code.value, false, () => {
+        isHighlighting = false
+      }),
+    50
+  )
+})
+<\/script>
+
+<style lang="sass" scoped>
+.project-file-viewer
+  :deep(*)
+    min-width: 0
+    min-height: 0
+
+  :deep(.n-card-cover)
+    overflow: visible
+
+  :deep(.n-card-header__main)
+    padding-left: 1.75rem
+
+  .path
+    transform: translate(calc(var(--n-padding-left) - 6px), .6rem)
+    padding-top: 0.5rem
+
+    :deep(.n-breadcrumb-item:first-child)
+      pointer-events: none
+
+  .code
+    &:not(.show-invisible)
+      :deep(.token)
+        &.lf, &.space, &.tab, &.cr, &.crlf
+          opacity: 0
+
+    :deep(.token)
+      transition: opacity .5s
+
+  .img-preview
+    border: 1px solid black
+    transform: scale(var(--scale, 1))
+    transition: transform .5s
+</style>
+`,"/packages/about/components/ProjectStructureEntry.vue":`<template lang="pug">
+.prose(v-html="rendered")
+</template>
+
+<script lang="ts" setup>
+import { marked } from "marked"
+
+const props = defineProps<{ markdownSource: string }>()
+const rendered = $computed(() => marked(props.markdownSource))
+<\/script>
+
+<style lang="sass" scoped>
+.prose
+  :deep(h2)
+    code
+      &::before, &::after
+        content: ""
+</style>
+`,"/packages/about/components/ProjectStructureExplorer.vue":`<template lang="pug">
+.explorer.flex.h-full.w-full
+  .flex-none.border-solid.mr-4(class="border-r-[1px] ml-[-1rem] min-w-[20rem]")
+    project-tree(:entries="tree" v-model="selectedKey" root)
+  .flex-1.min-w-0.relative
+    .spinner.absolute.w-full.h-full.top-0.flex.justify-center.items-center(
+      v-if="selectedKey !== null"
+    )
+      n-spin(size="large")
+    fade.h-full(duration="250ms" :transition="{ mode: 'out-in' }")
+      project-file-viewer.w-full.h-full(
+        v-model="selectedKey"
+        :key="selectedKey"
+        :subtree="subtree"
+      )
+</template>
+
+<script lang="ts" setup>
+import { useRouteQuery } from "@vueuse/router"
+import { Fade } from "@/framework/components/transitions"
+import { fetchProjectTree, findSubtreeByKey } from "../project"
+import ProjectFileViewer from "./ProjectFileViewer.vue"
+import ProjectTree from "./ProjectTree.vue"
+
+const tree = await fetchProjectTree()
+const selectedKey = useRouteQuery<string | null>("path", null)
+
+onBeforeUnmount(() => {
+  selectedKey.value = null
+})
+
+const subtree = $computed(() =>
+  selectedKey.value === null ? tree : findSubtreeByKey(selectedKey.value, tree)
+)
+<\/script>
+
+<style lang="sass" scoped>
+.explorer
+  background: var(--n-color)
+  z-index: 1
+</style>
+`,"/packages/about/components/ProjectTree.vue":`<template lang="pug">
+.pb-4.h-full.flex.flex-col
+  .controls.pl-7.pr-2.pt-1.mb-2.relative.flex-none(class="z-[1]")
+    n-input(placeholder="Search..." clearable @update:value="handleInput")
+    fade.absolute.top-3.left-0
+      n-spin(:size="20" v-if="isLoading")
+    n-switch.absolute.right-6(class="bottom-[-2rem]" v-model:value="showDotEntries")
+      template(#checked) Show dots
+      template(#unchecked) Hide dots
+  .flex-1.overflow-y-scroll.min-h-0
+    n-tree.project-tree(
+      :class="{ root, 'dot-shown': showDotEntries, empty: entries.length === 0 }"
+      :data="tree"
+      :node-props="generateProps"
+      :show-irrelevant-nodes="true"
+      v-model:expanded-keys="currentExpandedKeys.value"
+      :pattern="pattern"
+      v-model:selected-keys="selectedKeys"
+      v-bind="$attrs"
+    )
+</template>
+
+<script lang="ts" setup>
+import { useRouteQuery } from "@vueuse/router"
+import { NIcon } from "naive-ui"
+import type { Ref } from "vue"
+import { getFolderIcon } from "@/about/icons/folder"
+import { Fade } from "@/framework/components/transitions/index"
+import type { Tree, TreeNode } from "../project"
+import { isFolder } from "../project"
+
+const expandedKeys = ref<string[]>(["/"])
+let selectedKeys = $ref<string[]>([])
+watch(
+  () => selectedKeys,
+  () => {
+    if (selectedKeys.length === 0 || selectedKeys[0] === props.modelValue) {
+      return
+    }
+
+    model.value = selectedKeys[0]
+  }
+)
+
+const props = defineProps<{
+  entries: Readonly<Tree>
+  modelValue: string | null
+  root?: boolean
+}>()
+const emit = defineEmits<{
+  (event: "update:modelValue", payload: string): void
+}>()
+const model = useVModel(props, "modelValue", emit)
+watch(
+  model,
+  () => {
+    if (model.value === null) {
+      selectedKeys = []
+      return
+    }
+
+    selectedKeys = [model.value]
+  },
+  { immediate: true }
+)
+
+const currentExpandedKeys = $computed(
+  (): Ref<string[]> =>
+    pattern.value.length > 0
+      ? ref(["/", ...subtree.map((node) => node.key)])
+      : expandedKeys
+)
+
+function filterSubtree(tree: Readonly<Tree>): Tree {
+  return tree
+    .map((node) =>
+      isFolder(node)
+        ? {
+            ...node,
+            children: filterSubtree(node.children),
+          }
+        : node
+    )
+    .filter(
+      (node) =>
+        ((isFolder(node) && node.children.length > 0) ||
+          node.key.includes(pattern.value)) &&
+        (showDotEntries || !node.label.startsWith("."))
+    )
+}
+const subtree = $computed(() => {
+  return filterSubtree(props.entries)
+})
+
+const tree = $computed(() => {
+  if (props.root && subtree.length > 0) {
+    return [
+      {
+        key: "/",
+        label: "/",
+        children: subtree,
+        prefix: () =>
+          h(
+            NIcon,
+            { size: "1.25rem" },
+            { default: () => h(getFolderIcon("/")) }
+          ),
+      },
+    ]
+  }
+
+  return subtree
+})
+
+watch(
+  () => props.entries,
+  (entries) => {
+    if (props.root) {
+      return
+    }
+
+    expandedKeys.value = entries.map(({ key }) => key)
+  },
+  { immediate: true }
+)
+
+function generateProps({ option: node }: { option: TreeNode }) {
+  const { key, label } = node
+  const isDotEntry = label.startsWith(".")
+
+  return {
+    class: {
+      empty: !isFolder(node) || node.children.length === 0,
+      dot: isDotEntry,
+      "is-package-root":
+        isFolder(node) &&
+        key.startsWith("/packages/") &&
+        key.split("/").length === 3,
+    },
+  }
+}
+
+let isLoading = $ref(false)
+const query = ref("")
+const pattern = refDebounced(query, 500)
+
+watch(pattern, () =>
+  setTimeout(() => {
+    isLoading = false
+  }, 50)
+)
+
+function handleInput(value: string) {
+  query.value = value
+  isLoading = true
+}
+let showDotEntriesQuery = $(useRouteQuery<"true" | "false">("dot", "false"))
+let showDotEntries = $computed({
+  get(): boolean {
+    return showDotEntriesQuery === "true"
+  },
+  set(value: boolean) {
+    showDotEntriesQuery = value ? "true" : "false"
+  },
+})
+<\/script>
+
+<style lang="sass" scoped>
+.project-tree
+  &.root
+    :deep(> .n-tree-node-wrapper)
+      &:first-child
+        pointer-events: none
+
+        .n-tree-node-switcher
+          visibility: hidden
+
+    :deep(.n-tree-node)
+      margin-left: -1rem
+
+  :deep(.n-tree-node-wrapper)
+    margin-left: 1.5rem
+    padding: 0
+
+    &:nth-child(even)
+      background: rgba(0, 0, 0, 0.05)
+      --n-node-color-hover: rgba(0, 0, 0, 0.075)
+
+    > .n-tree-node
+      padding: 3px 0
+
+      &.empty
+        > .n-tree-node-switcher
+          visibility: hidden
+          pointer-events: none
+
+      &.dot .n-tree-node-content__text
+        opacity: .75
+
+      &.even.visible
+        background: rgba(0, 0, 0, 0.1)
+
+      &.is-package-root .n-tree-node-content__prefix
+        opacity: .75
+
+  :deep(.n-empty)
+    margin-top: 4rem
+</style>
+`,"/packages/about/components/index.ts":`export { default as ProjectFileViewer } from "./ProjectFileViewer.vue"
+export { default as ProjectStructureEntry } from "./ProjectStructureEntry.vue"
+export { default as ProjectStructureExplorer } from "./ProjectStructureExplorer.vue"
+export { default as ProjectTree } from "./ProjectTree.vue"
+`,"/packages/about/composables/prism.ts":`import Prism from "prismjs"
+import "prismjs/plugins/inline-color/prism-inline-color"
+import "prismjs/plugins/inline-color/prism-inline-color.css"
+import "prismjs/plugins/line-numbers/prism-line-numbers"
+import "prismjs/plugins/line-numbers/prism-line-numbers.css"
+import "prismjs/plugins/match-braces/prism-match-braces"
+import "prismjs/plugins/match-braces/prism-match-braces.css"
+import "prismjs/plugins/previewers/prism-previewers"
+import "prismjs/plugins/previewers/prism-previewers.css"
+import "prismjs/plugins/show-invisibles/prism-show-invisibles"
+import "prismjs/plugins/show-invisibles/prism-show-invisibles.css"
+import "prismjs/themes/prism.css"
+
+Prism.manual = true
+
+const EXTENSION_TO_LANGUAGE: Record<string, string> = {
+  md: "markdown",
+  ts: "typescript",
+  html: "vue",
+  cjs: "js",
+  yml: "yaml",
+  gitignore: "ignore",
+  gitattributes: "ignore",
+  prettierignore: "ignore",
+  prettierrc: "json",
+  eslintcache: "json",
+}
+
+export function getLanguageFromExtension(extension: string): string {
+  return EXTENSION_TO_LANGUAGE[extension] ?? extension
+}
+
+const loadedLanguages = new Set()
+const languageGlob = import.meta.glob(
+  "/node_modules/prismjs/components/prism-*.js"
+)
+export function usePrism(): {
+  Prism: typeof Prism
+  loadLanguage(name: string): Promise<void>
+} {
+  async function loadLanguage(extension: string): Promise<void> {
+    const language = getLanguageFromExtension(extension)
+    if (loadedLanguages.has(language)) {
+      return
+    }
+
+    loadedLanguages.add(language)
+
+    if (language === "vue") {
+      Prism.languages.vue = Prism.languages.extend("markup", {})
+    }
+
+    const key = Object.keys(languageGlob).find((key) => key.includes(language))
+
+    if (typeof key === "undefined") {
+      return
+    }
+
+    await languageGlob[key]()
+  }
+
+  return { Prism, loadLanguage }
+}
+`,"/packages/about/composables/source.ts":`import type { Ref } from "vue"
+import { fetchFileSource } from "../project"
+
+export function useSource(
+  file: Ref<string | null>
+): Readonly<Ref<string | null>> {
+  const source = ref<string | null>(null)
+
+  watch(
+    file,
+    async () => {
+      if (file.value === null) {
+        source.value = ""
+        return
+      }
+
+      source.value = (await fetchFileSource(file.value)) ?? null
+    },
+    { immediate: true }
+  )
+
+  return source
+}
+`,"/packages/about/icons/CustomFolder.vue":`<template lang="pug">
+span.icon.relative
+  n-icon(v-bind="$attrs" :color="baseColor")
+    i-vscode-icons-default-folder.folder
+  n-icon-wrapper.absolute.top-3.left-2(
+    :size="14"
+    :border-radius="radius ?? 0"
+    v-if="typeof backgroundColor !== 'undefined'"
+    :color="backgroundColor"
+  )
+    n-icon(size="0.75rem" :color="topColor")
+      component.top(
+        :is="icon"
+        :class="{ 'custom-color': typeof topColor !== 'undefined' }"
+      )
+  n-icon.absolute.top-2.left-2(size="1rem" :color="topColor" v-else)
+    component.top(
+      :is="icon"
+      :class="{ 'custom-color': typeof topColor !== 'undefined' }"
+    )
+</template>
+
+<script lang="ts" setup>
+import type { Component } from "vue"
+
+const props = defineProps<{
+  baseColor: string
+  topColor?: string
+  icon: Component
+  backgroundColor?: string
+  radius?: number
+}>()
+<\/script>
+
+<style lang="sass" scoped>
+.icon
+  .folder
+    :deep(path)
+      fill: currentColor
+
+  .top.custom-color
+    :deep(path)
+      fill: currentColor
+</style>
+`,"/packages/about/icons/file.ts":`import * as icons from "./imports"
+import type { Icon } from "./types"
+
+const fileIconsByExtension: Record<string, Icon> = {
+  ts: icons.IconTypescriptOfficial,
+  cts: icons.IconTypescriptOfficial,
+  mts: icons.IconTypescriptOfficial,
+  js: icons.IconJavascriptOfficial,
+  cjs: icons.IconJavascriptOfficial,
+  mjs: icons.IconJavascriptOfficial,
+  json: icons.IconJson,
+  lock: icons.IconYarn,
+  LICENSE: icons.IconText,
+  md: icons.IconMarkdown,
+  html: icons.IconXml,
+  css: icons.IconCss,
+  sass: icons.IconScss,
+  vue: icons.IconVue,
+  yml: icons.IconYaml,
+  ico: icons.IconImage,
+  png: icons.IconImage,
+  jpg: icons.IconImage,
+}
+
+function getFileIconByExtension(extension?: string): Icon {
+  if (typeof extension === "undefined") {
+    return icons.IconDefaultFile
+  }
+
+  return fileIconsByExtension[extension] ?? icons.IconDefaultFile
+}
+
+const testHasParent = (parentKey: string) => (_: string, key: string) =>
+  key.startsWith(parentKey)
+const testRegex = (regex: RegExp) => (filename: string) => regex.test(filename)
+const testFilename = (name: string) => (filename: string) => name === filename
+const testStartsWith = (prefix: string) => (filename: string) =>
+  filename.startsWith(prefix)
+const testEndsWith = (suffix: string) => (filename: string) =>
+  filename.endsWith(suffix)
+const specialFileIcons: [
+  test: (filename: string, key: string) => boolean,
+  icon: Icon
+][] = [
+  [testHasParent("/.github/workflows"), icons.IconFeatherCpu],
+  [testRegex(/tsconfig(\\..+)?\\.json/m), icons.IconTsconfig],
+  [testFilename("package.json"), icons.IconNpm],
+  [testStartsWith("vite.config."), icons.IconVite],
+  [testStartsWith("cypress."), icons.IconCypress],
+  [testRegex(/.+\\.spec\\..+/m), icons.IconCypressSpec],
+  [testEndsWith(".d.ts"), icons.IconTsconfigOfficial],
+  [testStartsWith("postcss.config."), icons.IconPostcssConfig],
+  [testStartsWith("tailwind.config."), icons.IconTailwind],
+  [testStartsWith(".prettier"), icons.IconPrettier],
+  [testStartsWith(".git"), icons.IconGit],
+  [testStartsWith(".eslint"), icons.IconEslint],
+  [testStartsWith(".yarn"), icons.IconYarn],
+]
+
+function getSpecialIcon(filename: string, key: string): Icon | null {
+  const entry = specialFileIcons.find(([test]) => test(filename, key))
+
+  if (typeof entry === "undefined") {
+    return null
+  }
+
+  return entry[1]
+}
+
+export function getFileIcon(key: string) {
+  const name = key.split("/").at(-1)
+
+  if (typeof name === "undefined") {
+    return icons.IconDefaultFile
+  }
+
+  const specialIcon = getSpecialIcon(name, key)
+  if (specialIcon !== null) {
+    return specialIcon
+  }
+
+  const extension = name.split(".").at(-1)
+  return getFileIconByExtension(extension)
+}
+`,"/packages/about/icons/folder.ts":`import CustomFolder from "./CustomFolder.vue"
+import * as icons from "./imports"
+import { IconDefaultFolder } from "./imports"
+import type { Icon } from "./types"
+
+type IconTest = (name: string, key: string) => boolean
+
+function createCustomRenderer(
+  baseColor: string,
+  icon: Icon,
+  options: {
+    topColor?: string
+    backgroundColor?: string
+    radius?: number
+  } = {}
+): Icon {
+  return () => h(CustomFolder, { baseColor, icon, ...options })
+}
+
+const testIsKey =
+  (value: string): IconTest =>
+  (_, key) =>
+    key === value
+const testHasParent =
+  (parent: string): IconTest =>
+  (_, key) =>
+    key.includes(parent)
+const specialFolderIcons: [test: IconTest, icon: Icon][] = [
+  [testIsKey("/"), icons.IconRootFolder],
+  [testHasParent("cypress"), icons.IconFolderCypress],
+  [testHasParent("dist"), icons.IconFolderBinary],
+  [testIsKey("/packages"), icons.IconFolderApp],
+  [testIsKey("/.yarn"), icons.IconFolderYarn],
+  [testIsKey("/.github"), icons.IconFolderGithub],
+  [testHasParent("types"), icons.IconFolderTypescript],
+  [testHasParent("assets"), icons.IconFolderAsset],
+  [testHasParent("icons"), icons.IconFolderImages],
+  [testIsKey("/packages/about"), icons.IconFeatherInfo],
+  [testIsKey("/packages/fairytome"), icons.IconFeatherBookOpen],
+  [testIsKey("/packages/framework"), icons.IconFeatherCode],
+  [testIsKey("/packages/home"), icons.IconFeatherHome],
+  [testIsKey("/packages/utilities"), icons.IconFeatherTool],
+  [
+    testHasParent(".github/workflows"),
+    createCustomRenderer("grey", icons.IconFeatherCpu, {
+      topColor: "black",
+      backgroundColor: "white",
+      radius: 6,
+    }),
+  ],
+  [testHasParent("components"), createCustomRenderer("#14622a", icons.IconVue)],
+  [
+    testHasParent("composables"),
+    createCustomRenderer("#14622a", icons.IconVueConfig),
+  ],
+  [
+    testHasParent("pages"),
+    createCustomRenderer("#14622a", icons.IconDefaultFile, {
+      topColor: "white",
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+    }),
+  ],
+  [testHasParent("vite"), createCustomRenderer("#14622a", icons.IconVite)],
+]
+
+function getSpecialFolderIcon(key: string): Icon | null {
+  const name = key.split("/").at(-1)
+
+  if (typeof name === "undefined") {
+    return IconDefaultFolder
+  }
+
+  const entry = specialFolderIcons.find(([test]) => test(name, key))
+
+  if (typeof entry === "undefined") {
+    return null
+  }
+
+  return entry[1]
+}
+
+export function getFolderIcon(key: string): Icon {
+  return getSpecialFolderIcon(key) ?? icons.IconDefaultFolder
+}
+`,"/packages/about/icons/imports.ts":`export { default as IconDefaultFile } from "~icons/vscode-icons/default-file"
+export { default as IconTypescriptOfficial } from "~icons/vscode-icons/file-type-typescript-official"
+export { default as IconTsconfig } from "~icons/vscode-icons/file-type-tsconfig"
+export { default as IconTsconfigOfficial } from "~icons/vscode-icons/file-type-tsconfig-official"
+export { default as IconJavascriptOfficial } from "~icons/vscode-icons/file-type-js-official"
+export { default as IconXquery } from "~icons/vscode-icons/file-type-xquery"
+export { default as IconJson } from "~icons/vscode-icons/file-type-json"
+export { default as IconYarn } from "~icons/vscode-icons/file-type-yarn"
+export { default as IconText } from "~icons/vscode-icons/file-type-text"
+export { default as IconMarkdown } from "~icons/vscode-icons/file-type-markdown"
+export { default as IconXml } from "~icons/vscode-icons/file-type-xml"
+export { default as IconNpm } from "~icons/vscode-icons/file-type-npm"
+export { default as IconVite } from "~icons/vscode-icons/file-type-vite"
+export { default as IconCypress } from "~icons/vscode-icons/file-type-cypress"
+export { default as IconCypressSpec } from "~icons/vscode-icons/file-type-cypress-spec"
+export { default as IconCss } from "~icons/vscode-icons/file-type-css"
+export { default as IconScss } from "~icons/vscode-icons/file-type-scss"
+export { default as IconVue } from "~icons/vscode-icons/file-type-vue"
+export { default as IconPostcssConfig } from "~icons/vscode-icons/file-type-postcssconfig"
+export { default as IconTailwind } from "~icons/vscode-icons/file-type-tailwind"
+export { default as IconYaml } from "~icons/vscode-icons/file-type-yaml"
+export { default as IconPrettier } from "~icons/vscode-icons/file-type-prettier"
+export { default as IconGit } from "~icons/vscode-icons/file-type-git"
+export { default as IconEslint } from "~icons/vscode-icons/file-type-eslint"
+export { default as IconVueConfig } from "~icons/vscode-icons/file-type-vueconfig"
+export { default as IconImage } from "~icons/vscode-icons/file-type-image"
+
+export { default as IconFeatherInfo } from "~icons/feather/info"
+export { default as IconFeatherBookOpen } from "~icons/feather/book-open"
+export { default as IconFeatherCode } from "~icons/feather/code"
+export { default as IconFeatherHome } from "~icons/feather/home"
+export { default as IconFeatherTool } from "~icons/feather/tool"
+export { default as IconFeatherCpu } from "~icons/feather/cpu"
+
+export { default as IconDefaultFolder } from "~icons/vscode-icons/default-folder"
+export { default as IconRootFolder } from "~icons/vscode-icons/default-root-folder"
+export { default as IconFolderCypress } from "~icons/vscode-icons/folder-type-cypress"
+export { default as IconFolderBinary } from "~icons/vscode-icons/folder-type-binary"
+export { default as IconFolderApp } from "~icons/vscode-icons/folder-type-app"
+export { default as IconFolderYarn } from "~icons/vscode-icons/folder-type-yarn"
+export { default as IconFolderTypescript } from "~icons/vscode-icons/folder-type-typescript"
+export { default as IconFolderAsset } from "~icons/vscode-icons/folder-type-asset"
+export { default as IconFolderImages } from "~icons/vscode-icons/folder-type-images"
+export { default as IconFolderGithub } from "~icons/vscode-icons/folder-type-github"
+`,"/packages/about/icons/index.ts":`import { isFile, isFolder } from "../project"
+import type { TreeNode } from "../project"
+import { getFileIcon } from "./file"
+import { getFolderIcon } from "./folder"
+import { IconXquery } from "./imports"
+import type { Icon } from "./types"
+
+const ICON_UNKNOWN = IconXquery
+
+export function getIcon(node: TreeNode): Icon {
+  const { key } = node
+
+  if (isFile(node)) {
+    return getFileIcon(key)
+  }
+
+  if (isFolder(node)) {
+    return getFolderIcon(key)
+  }
+
+  return ICON_UNKNOWN
+}
+
+export const getIconForFolder = getFolderIcon
+export const getIconForFile = getFileIcon
+`,"/packages/about/icons/types.ts":`export type Icon = typeof import("~icons/*").default
+`,"/packages/about/pages/index.vue":`<template lang="pug">
+.about-index.p-4.flex.w-full.h-full.overflow-hidden
+  n-card.flex.flex-1.h-full.overflow-hidden(title="About this page")
+    template(#header-extra)
+      n-breadcrumb
+        breadcrumb-item(href="/")
+          template(#icon): i-feather-home
+          | Home
+        n-breadcrumb-item
+          n-icon.mr-1: i-feather-info
+          | About
+    n-tabs.tabs.h-full.flex.flex-col(
+      type="line"
+      animated
+      v-model:value="activeTab"
+    )
+      n-tab-pane.h-full(
+        tab="General structure"
+        name="general-structure"
+        @transitionend.self="transitionEndHandler('general-structure', $event)"
+      )
+        fade.flex.h-full(duration=".5s" :transition="{ mode: 'out-in' }")
+          suspense(v-if="explorer !== null")
+            component(:is="explorer" :key="activeTab")
+        .flex.items-center.justify-center.w-full.h-full.absolute.top-0
+          n-spin(size="large")
+      n-tab-pane.h-full(
+        tab="Vite config"
+        name="vite-config"
+        @transitionend.self="transitionEndHandler('vite-config', $event)"
+      )
+      n-tab-pane.h-full(
+        tab="Custom plugins"
+        name="custom-plugins"
+        @transitionend.self="transitionEndHandler('custom-plugins', $event)"
+      )
+</template>
+
+<script lang="ts" setup>
+import { useRouteQuery } from "@vueuse/router"
+import type { Component } from "vue"
+import { Fade } from "@/framework/components/transitions/index"
+import { BreadcrumbItem } from "@/framework/components/ui"
+
+const TABS = {
+  "general-structure": "General structure",
+  "vite-config": "Vite config",
+  "custom-plugins": "Custom plugins",
+}
+type TabId = keyof typeof TABS
+
+let transitionDone = $ref(true)
+const activeTab = useRouteQuery<TabId>("tab", "general-structure")
+watch(activeTab, () => {
+  transitionDone = false
+})
+
+const explorer = shallowRef<Component | null>(null)
+
+watch(
+  () => [transitionDone, activeTab],
+  () => {
+    explorer.value =
+      activeTab.value === "general-structure" && transitionDone
+        ? defineAsyncComponent(
+            () => import("@/about/components/ProjectStructureExplorer.vue")
+          )
+        : null
+  },
+  { immediate: true }
+)
+
+function transitionEndHandler(name: TabId, event: TransitionEvent): void {
+  if (name === activeTab.value) {
+    transitionDone = true
+  }
+}
+<\/script>
+
+<style lang="sass" scoped>
+.about-index
+  > :deep(.n-card > .n-card__content)
+    height: calc(100% - 4rem)
+
+  :deep(.tabs > .n-tabs-pane-wrapper)
+    height: calc(100% - 3rem)
+    overflow: visible
+</style>
+`,"/packages/about/structure/glob.worker.ts":`const entryImports = import.meta.globEager<string>("./entries/(*|.*)/**", {
+  as: "raw",
+})
+
+export async function fetchSource(filename: string): Promise<string | null> {
+  return entryImports[\`./entries\${filename}.md\`] ?? null
+}
+`,"/packages/about/structure/index.ts":`const globWorker = new ComlinkWorker<typeof import("./glob.worker")>(
+  new URL("./glob.worker.ts", import.meta.url)
+)
+
+export function fetchEntry(key: string): Promise<any> | null {
+  return globWorker.fetchSource(key)
+}
+`,"/packages/fairytome/components/Control.vue":`<template lang="pug">
+.control
+  n-form-item(v-if="control.type === 'text'" :label="label")
+    n-input(v-model:value="model")
+  n-form-item(
+    v-if="control.type === 'range'"
+    :label="\`\${label}: \${modelValue}\`"
+  )
+    n-slider.w-full(
+      v-model:value="model"
+      :min="control.min"
+      :max="control.max"
+      :step="control.step"
+    )
+  n-form-item(v-if="control.type === 'color'" :label="label")
+    n-color-picker(v-model:value="model")
+  n-checkbox(v-if="control.type === 'checkbox'" v-model:checked="model") {{ label }}
+</template>
+
+<script lang="ts" setup>
+import { useVModel } from "@vueuse/core"
+import { computed } from "vue"
+import type { EntryOption } from "@/fairytome/entry"
+
+const props = withDefaults(
+  defineProps<{
+    title: string
+    control: EntryOption
+    index?: number | null
+    modelValue: EntryOption["initial"]
+  }>(),
+  { index: null }
+)
+const emit = defineEmits<{
+  (event: "update:modelValue", value: EntryOption["initial"]): void
+}>()
+
+const model = useVModel(props, "modelValue", emit)
+
+const label = computed(() =>
+  props.index !== null
+    ? \`\${props.control.label} #\${props.index}\`
+    : props.control.label
+)
+<\/script>
+`,"/packages/fairytome/components/ControlBar.vue":`<template lang="pug">
+.control-bar
+  template(v-for="(control, prop) in entry.controls")
+    .flex.flex-row.relative(v-for="(_, index) in model[prop]" :key="index")
+      control.flex-1(
+        :control="control"
+        :title="\`\${prop} #\${index + 1}\`"
+        :index="model[prop].length > 1 ? index : null"
+        :class="{ 'rounded-br-none': index === model[prop].length - 1, 'rounded-r-none': model[prop].length > 1 }"
+        v-model="model[prop][index]"
+      )
+      template(v-if="'amount' in control")
+        n-button.self-end(
+          v-if="model[prop].length > 1"
+          class="mb-[1.5rem]"
+          @click="model[prop].splice(index, 1)"
+        )
+          i-feather-minus-circle.text-red-500
+        n-button.absolute.right-0.bottom-0.add.rounded-t-none(
+          v-if="index === model[prop].length - 1"
+          @click="addControlPropEntry(prop)"
+        )
+          i-feather-plus-circle.text-green-600
+</template>
+
+<script lang="ts" setup>
+import type { Entry } from "@/fairytome/entry"
+import Control from "./Control.vue"
+
+const props = defineProps<{
+  entry: Entry
+  modelValue: Record<string, any[]>
+}>()
+const emit = defineEmits<{
+  (event: "update:modelValue", value: Record<string, unknown>): void
+}>()
+
+const model = $(useVModel(props, "modelValue", emit))
+watch(
+  () => props.entry,
+  (current) => {
+    const storedKeys = Object.keys(model)
+    const currentKeys = Object.keys(current.controls)
+
+    const keys = {
+      toBeDeleted: storedKeys.filter((key) => !currentKeys.includes(key)),
+      toBeAdded: currentKeys.filter((key) => !storedKeys.includes(key)),
+    }
+
+    keys.toBeDeleted.forEach((key) => {
+      delete model[key]
+    })
+
+    keys.toBeAdded.forEach((key) => {
+      model[key] = [current.controls[key].initial]
+    })
+  },
+  { immediate: true }
+)
+
+function addControlPropEntry(prop: string) {
+  model[prop].push(props.entry.controls[prop].initial)
+}
+<\/script>
+
+<style lang="sass" scoped>
+.control-bar
+  button.add
+    transform: translateY(.55rem)
+</style>
+`,"/packages/fairytome/components/Explorer.vue":`<template lang="pug">
+n-form
+  n-form-item(label="Package")
+    n-select(
+      v-model:value="currentPackage"
+      :options="packages.length > 0 ? packages.map((name) => ({ label: name, value: name })) : [{ label: 'Loading...', disabled: true, value: '' }]"
+      :disabled="packages.length === 0"
+    )
+  n-form-item(label="Entry")
+    n-select(
+      v-model:value="currentName"
+      :options="names.length > 0 ? names.map((name) => ({ label: name, value: name })) : [{ label: 'Loading...', disabled: true, value: '' }]"
+      :disabled="names.length === 0"
+    )
+</template>
+
+<script lang="ts" setup>
+import { useRouteQuery } from "@vueuse/router"
+import { pathToEntryMeta } from "@/fairytome/entries"
+import type { Entry } from "@/fairytome/entry"
+
+const props = defineProps<{ entries: Entry[]; modelValue: Entry | null }>()
+const emit = defineEmits<{
+  (event: "update:modelValue", value: Entry): void
+}>()
+let model = $(useVModel(props, "modelValue", emit))
+
+let currentPackage = $ref("")
+let currentName = $ref("")
+const routeQuery = $(useRouteQuery<string>("entry", ""))
+
+watch(
+  () => [currentPackage, currentName],
+  () => {
+    const newEntry = props.entries.find(
+      (entry) => entry.package === currentPackage && entry.name === currentName
+    )
+
+    if (typeof newEntry === "undefined") {
+      return
+    }
+
+    model = newEntry
+  }
+)
+
+const packages = $computed(() => [
+  ...new Set(props.entries.map((entry) => entry.package)),
+])
+const names = $computed(() =>
+  props.entries
+    .filter((entry) => entry.package === currentPackage)
+    .map((entry) => entry.name)
+)
+
+watch(
+  () => props.entries,
+  () => {
+    if (model !== null) {
+      currentPackage = model.package
+      currentName = model.name
+    } else {
+      if (props.entries.length > 0) {
+        if (routeQuery.length > 0) {
+          const meta = pathToEntryMeta(routeQuery)
+          currentPackage = meta.package
+          currentName = meta.name
+        } else {
+          currentPackage = props.entries[0].package
+          currentName = props.entries[0].name
+        }
+      }
+    }
+  },
+  { immediate: true }
+)
+<\/script>
+`,"/packages/fairytome/components/index.ts":`export { default as Control } from "./Control.vue"
+export { default as ControlBar } from "./ControlBar.vue"
+export { default as Explorer } from "./Explorer.vue"
+`,"/packages/fairytome/pages/index.vue":`<template lang="pug">
+.fairytome-index.flex.p-4.gap-4.text-white.w-full.h-full
+  .flex.flex-1.flex-col.gap-4(class="min-w-[20rem]")
+    n-card(title="Fairytome")
+      template(#header-extra)
+        n-breadcrumb
+          breadcrumb-item(href="/")
+            template(#icon): i-feather-home
+            | Home
+          breadcrumb-item
+            template(#icon): i-feather-book-open
+      explorer(:entries="entries" v-model="chosenEntry")
+    n-card.flex-1.flex.flex-col.overflow-hidden
+      control-bar(
+        v-if="chosenEntry !== null"
+        :entry="chosenEntry"
+        v-model="controlProps.value"
+      )
+      .placeholder.w-full.h-full.flex.justify-center.align-center(v-else)
+        n-spin(size="large")
+  n-card.stage.overflow-hidden.flex.flex-col.align-center.justify-center(
+    class="flex-[3]"
+  )
+    component(
+      v-if="chosenEntry !== null"
+      :is="chosenEntry.component"
+      v-bind="controlPropsUnpacked"
+    )
+    .placeholder.w-full.h-full.flex.justify-center.align-center(v-else)
+      n-spin(size="large")
+</template>
+
+<script lang="ts" setup>
+import { useRouteQuery } from "@vueuse/router"
+import { ControlBar, Explorer } from "@/fairytome/components"
+import { useEntries } from "@/fairytome/entries"
+import type { Entry } from "@/fairytome/entry"
+import { BreadcrumbItem } from "@/framework/components/ui"
+
+const { entries } = toRefs(useEntries())
+const packages = computed(() => [
+  ...new Set(entries.value.map((entry) => entry.package)),
+])
+
+const options = computed(() =>
+  entries.value.map((entry) => ({ label: entry.name, value: entry.name }))
+)
+
+let chosenEntry = $ref<Entry | null>(null)
+let entryRouteQuery = $(useRouteQuery<string>("entry", ""))
+
+watch(
+  () => chosenEntry,
+  () => {
+    entryRouteQuery = \`\${chosenEntry?.package}/\${chosenEntry?.path}/\${chosenEntry?.name}\`
+  }
+)
+
+const controlProps = computed(() =>
+  useLocalStorage(
+    \`FAIRYTOME_\${chosenEntry?.package}_\${chosenEntry?.path}_\${chosenEntry?.name}\`,
+    {} as Record<string, any[]>
+  )
+)
+const controlPropsUnpacked = computed(() =>
+  Object.fromEntries([
+    ...Object.entries(controlProps.value.value).map(([prop, value]) => {
+      if (chosenEntry === null) {
+        return [prop, value]
+      }
+
+      const control = chosenEntry.controls[prop]
+
+      if (
+        typeof control !== "undefined" &&
+        "amount" in control &&
+        value.length > 1
+      ) {
+        return [prop, value]
+      }
+
+      return [prop, value[0]]
+    }),
+    ...Object.entries(chosenEntry?.overrides ?? {}),
+  ])
+)
+<\/script>
+
+<style lang="sass" scoped>
+.fairytome-index
+  .placeholder
+    background: rgba(0, 0, 0, 0.3)
+    transform: scale(1.5)
+
+  .stage
+    > :deep(.p-4)
+      height: 100%
+
+    > :deep(.n-card__content)
+      max-height: 100%
+
+      > *
+        max-height: 100%
+</style>
+`,"/packages/framework/assets/style.css":`@tailwind base;
+@tailwind components;
+@tailwind utilities;
+`,"/packages/framework/assets/transitions.sass":`.fade
+  &-enter-active, &-leave-active
+    transition: opacity var(--transition-fade-duration, 1s)
+
+  &-enter-from, &-leave-to
+    opacity: 0
+`,"/packages/framework/components/Background.entry.ts":`import { createEntry } from "@/fairytome/entry"
+import Background from "./Background.vue"
+
+export const entry = createEntry<Background>({
+  component: Background,
+  controls: {
+    blobAmount: {
+      label: "Number of blobs",
+      type: "range",
+      min: 1,
+      max: 20,
+      initial: 1,
+    },
+    velocityCoefficient: {
+      label: "Velocity coefficient",
+      type: "range",
+      min: 0,
+      max: 10,
+      step: 0.01,
+      initial: 1,
+    },
+  },
+})
+`,"/packages/framework/components/Background.vue":`<template lang="pug">
+.background.w-full.h-full.overflow-hidden
+  background-blob.blob(
+    v-if="blobs.length > 0"
+    v-for="({ scaledPosition, outOfFrame }, index) in blobs"
+    :class="{ 'out-of-frame': outOfFrame }"
+    :color="[palette[index % palette.length][1], palette[index % palette.length][0], palette[index % palette.length][2]]"
+    :rotation-speed="1"
+    :style="{ '--left': \`\${scaledPosition[0]}\`, '--top': \`\${scaledPosition[1]}\`, '--size': BLOB_SIZE_PERCENTAGE }"
+  )
+</template>
+
+<script lang="ts" setup>
+import { randomAround, randomBetween } from "@/utilities/math"
+import BackgroundBlob from "./background/SvgBlob.vue"
+import { PALETTE } from "./provide"
+
+const props = withDefaults(
+  defineProps<{ blobAmount: number; velocityCoefficient?: number }>(),
+  {
+    velocityCoefficient: 1,
+  }
+)
+let blobs = $ref<
+  {
+    position: [x: number, y: number]
+    velocity: [x: number, y: number]
+    scaledPosition: [x: number, y: number]
+  }[]
+>([])
+
+const palette = $(inject(PALETTE))
+
+const BLOB_SIZE_PERCENTAGE = 0.2
+watch(
+  () => props.blobAmount,
+  (length) => {
+    blobs = Array.from({ length }, (_, i) => ({
+      position: [randomBetween(), randomBetween()],
+      velocity: [randomAround(-0.01, 0.005), randomAround(-0.012, 0.005)],
+      scaledPosition: reactiveComputed(() => [
+        (blobs[i]?.position ?? [0, 0])[0] * (1 + BLOB_SIZE_PERCENTAGE * 2.5) -
+          BLOB_SIZE_PERCENTAGE * 1.25,
+        (blobs[i]?.position ?? [0, 0])[1] * (1 + BLOB_SIZE_PERCENTAGE * 2.5) -
+          BLOB_SIZE_PERCENTAGE * 1.25,
+      ]),
+      outOfFrame: computed(
+        () =>
+          blobs[i].scaledPosition[0] < -BLOB_SIZE_PERCENTAGE ||
+          blobs[i].scaledPosition[0] > 1 ||
+          blobs[i].scaledPosition[1] < -BLOB_SIZE_PERCENTAGE ||
+          blobs[i].scaledPosition[1] > 1
+      ),
+    }))
+  },
+  { immediate: true }
+)
+
+const DELTA_COEFFICIENT = 1 / 1e3
+let lastTimestamp = 0
+function render() {
+  const now = Date.now()
+  const delta = lastTimestamp === 0 ? 0 : now - lastTimestamp
+  lastTimestamp = now
+
+  blobs.forEach((blob) => {
+    blob.position[0] +=
+      blob.velocity[0] * (delta * DELTA_COEFFICIENT) * props.velocityCoefficient
+    if (blob.position[0] < 0) {
+      blob.position[0] = 1
+    }
+    if (blob.position[0] > 1) {
+      blob.position[0] = 0
+    }
+
+    blob.position[1] +=
+      blob.velocity[1] * (delta * DELTA_COEFFICIENT) * props.velocityCoefficient
+    if (blob.position[1] < 0) {
+      blob.position[1] = 1
+    }
+    if (blob.position[1] > 1) {
+      blob.position[1] = 0
+    }
+  })
+}
+
+useRafFn(render)
+<\/script>
+
+<style lang="sass" scoped>
+.background
+  background: linear-gradient(240deg, var(--theme-color0-lighter), var(--theme-color0), var(--theme-color0-darker))
+
+  .blob
+    position: absolute
+    top: 0
+    left: 0
+    width: calc(100% * var(--size))
+    height: calc(100% * var(--size))
+    transform: translate(calc(var(--left, 0) * 100vw), calc(var(--top, 0) * 100vh))
+
+    &:not(.out-of-frame)
+      transition: transform linear 0.1s
+</style>
+`,"/packages/framework/components/Palette.entry.vue":`<template lang="pug">
+palette(v-slot="{ colors }")
+  n-table
+    thead
+      tr
+        th Index
+        th Color
+        th Lighter
+        th Darker
+    tbody
+      tr(
+        v-for="([normal, lighter, darker], index) in colors"
+        :key="index"
+        :data-index="index"
+      )
+        td(class="w-[3rem]") \\#{{ index }}
+        td(:style="{ background: normal }")
+        td(:style="{ background: lighter }")
+        td(:style="{ background: darker }")
+</template>
+
+<script lang="ts" setup>
+import Palette from "./Palette.vue"
+<\/script>
+
+<script lang="ts">
+import { createEntry } from "@/fairytome/entry"
+import PaletteComponent from "./Palette.vue"
+
+export const entry = createEntry<PaletteComponent>({
+  component: PaletteComponent,
+  controls: {
+    seed: {
+      type: "text",
+      label: "Seed",
+      initial: Date.now().toString(),
+    },
+    saturate: {
+      type: "range",
+      label: "Post: Saturation",
+      min: -5,
+      max: 5,
+      initial: 0,
+    },
+  },
+})
+<\/script>
+`,"/packages/framework/components/Palette.vue":`<template lang="pug">
+slot(:colors="palette")
+</template>
+
+<script lang="ts" setup>
+import chroma from "chroma-js"
+import hue from "iwanthue"
+import { PALETTE_COLOR_COUNT } from "@/framework/constants"
+import { PALETTE } from "./provide"
+
+const props = withDefaults(
+  defineProps<{ seed: string; saturate?: number; offset?: number }>(),
+  {
+    saturate: 0,
+    offset: 0,
+  }
+)
+
+const totalOffset = $computed(() => props.offset % PALETTE_COLOR_COUNT)
+
+const palette = $computed(() => {
+  const colors = hue(PALETTE_COLOR_COUNT, {
+    colorSpace: "pimp",
+    seed: props.seed,
+  }).map((color) => [
+    chroma(color).saturate(props.saturate).hex(),
+    chroma(color).brighten().saturate(props.saturate).hex(),
+    chroma(color).darken().saturate(props.saturate).hex(),
+  ])
+
+  return [...colors.slice(totalOffset), ...colors.slice(0, totalOffset)]
+})
+
+provide(PALETTE, $$(palette))
+
+onMounted(() => {
+  const element = useCurrentElement<HTMLElement>()
+  const container = computed(() => {
+    if (element.value.nodeType === Node.TEXT_NODE) {
+      return element.value.parentElement
+    }
+
+    return element.value
+  })
+
+  const themeColorsVariable = useCssVar("--theme-colors", container)
+  themeColorsVariable.value = Array.from(
+    { length: PALETTE_COLOR_COUNT },
+    (_, i) => [
+      \`--theme-color\${i}\`,
+      \`--theme-color\${i}-lighter\`,
+      \`--theme-color\${i}-darker\`,
+    ]
+  )
+    .flat()
+    .join(", ")
+
+  const styleVariables = Array.from(
+    { length: PALETTE_COLOR_COUNT },
+    (_, index) => [
+      useCssVar(\`--theme-color\${index}\`, container),
+      useCssVar(\`--theme-color\${index}-lighter\`, container),
+      useCssVar(\`--theme-color\${index}-darker\`, container),
+    ]
+  )
+
+  watch(
+    $$(palette),
+    () =>
+      palette.forEach(([normal, lighter, darker], index) => {
+        styleVariables[index][0].value = normal
+        styleVariables[index][1].value = lighter
+        styleVariables[index][2].value = darker
+      }),
+    { immediate: true }
+  )
+})
+<\/script>
+
+<style>
+@property --theme-color0-lighter {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color0 {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color0-darker {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color1-lighter {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color1 {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color1-darker {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color2-lighter {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color2 {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color2-darker {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color3-lighter {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color3 {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color3-darker {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color4-lighter {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color4 {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color4-darker {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color5-lighter {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color5 {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color5-darker {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color6-lighter {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color6 {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color6-darker {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color7-lighter {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color7 {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+
+@property --theme-color7-darker {
+  syntax: "<color>";
+  initial-value: black;
+  inherits: true;
+}
+</style>
+`,"/packages/framework/components/index.ts":`export { default as Background } from "./Background.vue"
+export { default as Palette } from "./Palette.vue"
+export * as provide from "./provide"
+`,"/packages/framework/components/provide.ts":`export const PALETTE = Symbol("palette provider")
+`,"/packages/framework/composables/background.ts":`import type { MaybeRef } from "@vueuse/core"
+import merge from "ts-deepmerge"
+import type { PartialDeep } from "type-fest"
+import { randomAround } from "@/utilities/math"
+import type { RandomJitter } from "@/utilities/math"
+
+type Point = [x: number, y: number]
+export type BezierControl = Point
+export type BezierControls = [start: BezierControl, end: BezierControl]
+
+export type BezierControlPointsOptions = {
+  jitter: {
+    offset: RandomJitter
+    coefficient: RandomJitter
+  }
+  amplitude: MaybeRef<number>
+  segments: MaybeRef<number>
+}
+
+const POINTS_PER_SEGMENT = 2
+const BEZIER_OFFSET = 1.157
+const bezierControlPointOptions = readonly<BezierControlPointsOptions>({
+  jitter: {
+    offset: 0.1,
+    coefficient: 0.05,
+  },
+  amplitude: 0.1,
+  segments: 4,
+})
+export function useBezierControlPoints(
+  time: MaybeRef<number>,
+  options: PartialDeep<BezierControlPointsOptions> = {}
+): Readonly<BezierControls[]> {
+  const { jitter, amplitude, segments } = merge(
+    {},
+    bezierControlPointOptions,
+    options
+  )
+
+  const baseControlPoints: Readonly<[Point, Point][]> = reactiveComputed(() => {
+    const angle = (2 * Math.PI) / (unref(segments) * (POINTS_PER_SEGMENT + 1))
+
+    return Array.from(
+      { length: unref(segments) },
+      (_, i) =>
+        Array.from({ length: POINTS_PER_SEGMENT }, (_, j) => [
+          Math.cos(angle * (i * (POINTS_PER_SEGMENT + 1) + j + 1)) *
+            BEZIER_OFFSET,
+          Math.sin(angle * (i * (POINTS_PER_SEGMENT + 1) + j + 1)) *
+            BEZIER_OFFSET,
+        ]) as [Point, Point]
+    )
+  })
+
+  const offsets: typeof baseControlPoints = reactiveComputed(() =>
+    Array.from({ length: unref(segments) }, (_, index) => {
+      const baseValue = (index + 1) / (unref(segments) + 1)
+      return [
+        [
+          randomAround(baseValue - 0.05, jitter.offset),
+          randomAround(baseValue - 0.05, jitter.offset),
+        ],
+        [
+          randomAround(baseValue + 0.05, jitter.offset),
+          randomAround(baseValue + 0.05, jitter.offset),
+        ],
+      ]
+    })
+  )
+
+  const coefficients: typeof baseControlPoints = reactiveComputed(() =>
+    Array.from({ length: unref(segments) }, () => [
+      [
+        randomAround(1, jitter.coefficient),
+        randomAround(1, jitter.coefficient),
+      ],
+      [
+        randomAround(1, jitter.coefficient),
+        randomAround(1, jitter.coefficient),
+      ],
+    ])
+  )
+
+  return reactiveComputed(() =>
+    baseControlPoints
+      .map(([start, end], index) => [
+        [
+          start[0] +
+            Math.sin(
+              unref(time) * coefficients[index][0][0] + offsets[index][0][0]
+            ) *
+              unref(amplitude),
+          start[1] +
+            Math.sin(
+              unref(time) * coefficients[index][0][1] + offsets[index][0][1]
+            ) *
+              unref(amplitude),
+        ],
+        [
+          end[0] +
+            Math.sin(
+              unref(time) * coefficients[index][1][0] + offsets[index][1][0]
+            ) *
+              unref(amplitude),
+          end[1] +
+            Math.sin(
+              unref(time) * coefficients[index][1][1] + offsets[index][1][1]
+            ) *
+              unref(amplitude),
+        ],
+      ])
+      .map(([start, end]) => [
+        [(start[0] + 1) / 2, (start[1] + 1) / 2],
+        [(end[0] + 1) / 2, (end[1] + 1) / 2],
+      ])
+  )
+}
+`,"/packages/framework/types/auto-import.d.ts":`// Generated by 'unplugin-auto-import'
+export {}
+declare global {
+  const EffectScope: typeof import('vue')['EffectScope']
+  const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
+  const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
+  const computed: typeof import('vue')['computed']
+  const computedAsync: typeof import('@vueuse/core')['computedAsync']
+  const computedEager: typeof import('@vueuse/core')['computedEager']
+  const computedInject: typeof import('@vueuse/core')['computedInject']
+  const computedWithControl: typeof import('@vueuse/core')['computedWithControl']
+  const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
+  const controlledRef: typeof import('@vueuse/core')['controlledRef']
+  const createApp: typeof import('vue')['createApp']
+  const createEventHook: typeof import('@vueuse/core')['createEventHook']
+  const createGlobalState: typeof import('@vueuse/core')['createGlobalState']
+  const createInjectionState: typeof import('@vueuse/core')['createInjectionState']
+  const createReactiveFn: typeof import('@vueuse/core')['createReactiveFn']
+  const createSharedComposable: typeof import('@vueuse/core')['createSharedComposable']
+  const createUnrefFn: typeof import('@vueuse/core')['createUnrefFn']
+  const customRef: typeof import('vue')['customRef']
+  const debouncedRef: typeof import('@vueuse/core')['debouncedRef']
+  const debouncedWatch: typeof import('@vueuse/core')['debouncedWatch']
+  const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
+  const defineComponent: typeof import('vue')['defineComponent']
+  const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
+  const effectScope: typeof import('vue')['effectScope']
+  const extendRef: typeof import('@vueuse/core')['extendRef']
+  const getCurrentInstance: typeof import('vue')['getCurrentInstance']
+  const getCurrentScope: typeof import('vue')['getCurrentScope']
+  const h: typeof import('vue')['h']
+  const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
+  const inject: typeof import('vue')['inject']
+  const isDefined: typeof import('@vueuse/core')['isDefined']
+  const isProxy: typeof import('vue')['isProxy']
+  const isReactive: typeof import('vue')['isReactive']
+  const isReadonly: typeof import('vue')['isReadonly']
+  const isRef: typeof import('vue')['isRef']
+  const logicAnd: typeof import('@vueuse/core')['logicAnd']
+  const logicNot: typeof import('@vueuse/core')['logicNot']
+  const logicOr: typeof import('@vueuse/core')['logicOr']
+  const makeDestructurable: typeof import('@vueuse/core')['makeDestructurable']
+  const markRaw: typeof import('vue')['markRaw']
+  const nextTick: typeof import('vue')['nextTick']
+  const onActivated: typeof import('vue')['onActivated']
+  const onBeforeMount: typeof import('vue')['onBeforeMount']
+  const onBeforeUnmount: typeof import('vue')['onBeforeUnmount']
+  const onBeforeUpdate: typeof import('vue')['onBeforeUpdate']
+  const onClickOutside: typeof import('@vueuse/core')['onClickOutside']
+  const onDeactivated: typeof import('vue')['onDeactivated']
+  const onErrorCaptured: typeof import('vue')['onErrorCaptured']
+  const onKeyStroke: typeof import('@vueuse/core')['onKeyStroke']
+  const onLongPress: typeof import('@vueuse/core')['onLongPress']
+  const onMounted: typeof import('vue')['onMounted']
+  const onRenderTracked: typeof import('vue')['onRenderTracked']
+  const onRenderTriggered: typeof import('vue')['onRenderTriggered']
+  const onScopeDispose: typeof import('vue')['onScopeDispose']
+  const onServerPrefetch: typeof import('vue')['onServerPrefetch']
+  const onStartTyping: typeof import('@vueuse/core')['onStartTyping']
+  const onUnmounted: typeof import('vue')['onUnmounted']
+  const onUpdated: typeof import('vue')['onUpdated']
+  const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
+  const provide: typeof import('vue')['provide']
+  const reactify: typeof import('@vueuse/core')['reactify']
+  const reactifyObject: typeof import('@vueuse/core')['reactifyObject']
+  const reactive: typeof import('vue')['reactive']
+  const reactiveComputed: typeof import('@vueuse/core')['reactiveComputed']
+  const reactiveOmit: typeof import('@vueuse/core')['reactiveOmit']
+  const reactivePick: typeof import('@vueuse/core')['reactivePick']
+  const readonly: typeof import('vue')['readonly']
+  const ref: typeof import('vue')['ref']
+  const refAutoReset: typeof import('@vueuse/core')['refAutoReset']
+  const refDebounced: typeof import('@vueuse/core')['refDebounced']
+  const refDefault: typeof import('@vueuse/core')['refDefault']
+  const refThrottled: typeof import('@vueuse/core')['refThrottled']
+  const refWithControl: typeof import('@vueuse/core')['refWithControl']
+  const resolveComponent: typeof import('vue')['resolveComponent']
+  const shallowReactive: typeof import('vue')['shallowReactive']
+  const shallowReadonly: typeof import('vue')['shallowReadonly']
+  const shallowRef: typeof import('vue')['shallowRef']
+  const syncRef: typeof import('@vueuse/core')['syncRef']
+  const syncRefs: typeof import('@vueuse/core')['syncRefs']
+  const templateRef: typeof import('@vueuse/core')['templateRef']
+  const throttledRef: typeof import('@vueuse/core')['throttledRef']
+  const throttledWatch: typeof import('@vueuse/core')['throttledWatch']
+  const toRaw: typeof import('vue')['toRaw']
+  const toReactive: typeof import('@vueuse/core')['toReactive']
+  const toRef: typeof import('vue')['toRef']
+  const toRefs: typeof import('vue')['toRefs']
+  const triggerRef: typeof import('vue')['triggerRef']
+  const tryOnBeforeMount: typeof import('@vueuse/core')['tryOnBeforeMount']
+  const tryOnBeforeUnmount: typeof import('@vueuse/core')['tryOnBeforeUnmount']
+  const tryOnMounted: typeof import('@vueuse/core')['tryOnMounted']
+  const tryOnScopeDispose: typeof import('@vueuse/core')['tryOnScopeDispose']
+  const tryOnUnmounted: typeof import('@vueuse/core')['tryOnUnmounted']
+  const unref: typeof import('vue')['unref']
+  const unrefElement: typeof import('@vueuse/core')['unrefElement']
+  const until: typeof import('@vueuse/core')['until']
+  const useActiveElement: typeof import('@vueuse/core')['useActiveElement']
+  const useAsyncQueue: typeof import('@vueuse/core')['useAsyncQueue']
+  const useAsyncState: typeof import('@vueuse/core')['useAsyncState']
+  const useAttrs: typeof import('vue')['useAttrs']
+  const useBase64: typeof import('@vueuse/core')['useBase64']
+  const useBattery: typeof import('@vueuse/core')['useBattery']
+  const useBreakpoints: typeof import('@vueuse/core')['useBreakpoints']
+  const useBroadcastChannel: typeof import('@vueuse/core')['useBroadcastChannel']
+  const useBrowserLocation: typeof import('@vueuse/core')['useBrowserLocation']
+  const useCached: typeof import('@vueuse/core')['useCached']
+  const useClamp: typeof import('@vueuse/core')['useClamp']
+  const useClipboard: typeof import('@vueuse/core')['useClipboard']
+  const useColorMode: typeof import('@vueuse/core')['useColorMode']
+  const useConfirmDialog: typeof import('@vueuse/core')['useConfirmDialog']
+  const useCounter: typeof import('@vueuse/core')['useCounter']
+  const useCssModule: typeof import('vue')['useCssModule']
+  const useCssVar: typeof import('@vueuse/core')['useCssVar']
+  const useCssVars: typeof import('vue')['useCssVars']
+  const useCurrentElement: typeof import('@vueuse/core')['useCurrentElement']
+  const useCycleList: typeof import('@vueuse/core')['useCycleList']
+  const useDark: typeof import('@vueuse/core')['useDark']
+  const useDateFormat: typeof import('@vueuse/core')['useDateFormat']
+  const useDebounce: typeof import('@vueuse/core')['useDebounce']
+  const useDebounceFn: typeof import('@vueuse/core')['useDebounceFn']
+  const useDebouncedRefHistory: typeof import('@vueuse/core')['useDebouncedRefHistory']
+  const useDeviceMotion: typeof import('@vueuse/core')['useDeviceMotion']
+  const useDeviceOrientation: typeof import('@vueuse/core')['useDeviceOrientation']
+  const useDevicePixelRatio: typeof import('@vueuse/core')['useDevicePixelRatio']
+  const useDevicesList: typeof import('@vueuse/core')['useDevicesList']
+  const useDisplayMedia: typeof import('@vueuse/core')['useDisplayMedia']
+  const useDocumentVisibility: typeof import('@vueuse/core')['useDocumentVisibility']
+  const useDraggable: typeof import('@vueuse/core')['useDraggable']
+  const useElementBounding: typeof import('@vueuse/core')['useElementBounding']
+  const useElementByPoint: typeof import('@vueuse/core')['useElementByPoint']
+  const useElementHover: typeof import('@vueuse/core')['useElementHover']
+  const useElementSize: typeof import('@vueuse/core')['useElementSize']
+  const useElementVisibility: typeof import('@vueuse/core')['useElementVisibility']
+  const useEventBus: typeof import('@vueuse/core')['useEventBus']
+  const useEventListener: typeof import('@vueuse/core')['useEventListener']
+  const useEventSource: typeof import('@vueuse/core')['useEventSource']
+  const useEyeDropper: typeof import('@vueuse/core')['useEyeDropper']
+  const useFavicon: typeof import('@vueuse/core')['useFavicon']
+  const useFetch: typeof import('@vueuse/core')['useFetch']
+  const useFileSystemAccess: typeof import('@vueuse/core')['useFileSystemAccess']
+  const useFocus: typeof import('@vueuse/core')['useFocus']
+  const useFocusWithin: typeof import('@vueuse/core')['useFocusWithin']
+  const useFps: typeof import('@vueuse/core')['useFps']
+  const useFullscreen: typeof import('@vueuse/core')['useFullscreen']
+  const useGamepad: typeof import('@vueuse/core')['useGamepad']
+  const useGeolocation: typeof import('@vueuse/core')['useGeolocation']
+  const useIdle: typeof import('@vueuse/core')['useIdle']
+  const useInfiniteScroll: typeof import('@vueuse/core')['useInfiniteScroll']
+  const useIntersectionObserver: typeof import('@vueuse/core')['useIntersectionObserver']
+  const useInterval: typeof import('@vueuse/core')['useInterval']
+  const useIntervalFn: typeof import('@vueuse/core')['useIntervalFn']
+  const useKeyModifier: typeof import('@vueuse/core')['useKeyModifier']
+  const useLastChanged: typeof import('@vueuse/core')['useLastChanged']
+  const useLocalStorage: typeof import('@vueuse/core')['useLocalStorage']
+  const useMagicKeys: typeof import('@vueuse/core')['useMagicKeys']
+  const useManualRefHistory: typeof import('@vueuse/core')['useManualRefHistory']
+  const useMediaControls: typeof import('@vueuse/core')['useMediaControls']
+  const useMediaQuery: typeof import('@vueuse/core')['useMediaQuery']
+  const useMemoize: typeof import('@vueuse/core')['useMemoize']
+  const useMemory: typeof import('@vueuse/core')['useMemory']
+  const useMounted: typeof import('@vueuse/core')['useMounted']
+  const useMouse: typeof import('@vueuse/core')['useMouse']
+  const useMouseInElement: typeof import('@vueuse/core')['useMouseInElement']
+  const useMousePressed: typeof import('@vueuse/core')['useMousePressed']
+  const useMutationObserver: typeof import('@vueuse/core')['useMutationObserver']
+  const useNavigatorLanguage: typeof import('@vueuse/core')['useNavigatorLanguage']
+  const useNetwork: typeof import('@vueuse/core')['useNetwork']
+  const useNow: typeof import('@vueuse/core')['useNow']
+  const useOffsetPagination: typeof import('@vueuse/core')['useOffsetPagination']
+  const useOnline: typeof import('@vueuse/core')['useOnline']
+  const usePageLeave: typeof import('@vueuse/core')['usePageLeave']
+  const useParallax: typeof import('@vueuse/core')['useParallax']
+  const usePermission: typeof import('@vueuse/core')['usePermission']
+  const usePointer: typeof import('@vueuse/core')['usePointer']
+  const usePointerSwipe: typeof import('@vueuse/core')['usePointerSwipe']
+  const usePreferredColorScheme: typeof import('@vueuse/core')['usePreferredColorScheme']
+  const usePreferredDark: typeof import('@vueuse/core')['usePreferredDark']
+  const usePreferredLanguages: typeof import('@vueuse/core')['usePreferredLanguages']
+  const useRafFn: typeof import('@vueuse/core')['useRafFn']
+  const useRefHistory: typeof import('@vueuse/core')['useRefHistory']
+  const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
+  const useRoute: typeof import('vue-router')['useRoute']
+  const useRouter: typeof import('vue-router')['useRouter']
+  const useScreenOrientation: typeof import('@vueuse/core')['useScreenOrientation']
+  const useScreenSafeArea: typeof import('@vueuse/core')['useScreenSafeArea']
+  const useScriptTag: typeof import('@vueuse/core')['useScriptTag']
+  const useScroll: typeof import('@vueuse/core')['useScroll']
+  const useScrollLock: typeof import('@vueuse/core')['useScrollLock']
+  const useSessionStorage: typeof import('@vueuse/core')['useSessionStorage']
+  const useShare: typeof import('@vueuse/core')['useShare']
+  const useSlots: typeof import('vue')['useSlots']
+  const useSpeechRecognition: typeof import('@vueuse/core')['useSpeechRecognition']
+  const useSpeechSynthesis: typeof import('@vueuse/core')['useSpeechSynthesis']
+  const useStorage: typeof import('@vueuse/core')['useStorage']
+  const useStorageAsync: typeof import('@vueuse/core')['useStorageAsync']
+  const useStyleTag: typeof import('@vueuse/core')['useStyleTag']
+  const useSwipe: typeof import('@vueuse/core')['useSwipe']
+  const useTemplateRefsList: typeof import('@vueuse/core')['useTemplateRefsList']
+  const useTextSelection: typeof import('@vueuse/core')['useTextSelection']
+  const useThrottle: typeof import('@vueuse/core')['useThrottle']
+  const useThrottleFn: typeof import('@vueuse/core')['useThrottleFn']
+  const useThrottledRefHistory: typeof import('@vueuse/core')['useThrottledRefHistory']
+  const useTimeAgo: typeof import('@vueuse/core')['useTimeAgo']
+  const useTimeout: typeof import('@vueuse/core')['useTimeout']
+  const useTimeoutFn: typeof import('@vueuse/core')['useTimeoutFn']
+  const useTimeoutPoll: typeof import('@vueuse/core')['useTimeoutPoll']
+  const useTimestamp: typeof import('@vueuse/core')['useTimestamp']
+  const useTitle: typeof import('@vueuse/core')['useTitle']
+  const useToggle: typeof import('@vueuse/core')['useToggle']
+  const useTransition: typeof import('@vueuse/core')['useTransition']
+  const useUrlSearchParams: typeof import('@vueuse/core')['useUrlSearchParams']
+  const useUserMedia: typeof import('@vueuse/core')['useUserMedia']
+  const useVModel: typeof import('@vueuse/core')['useVModel']
+  const useVModels: typeof import('@vueuse/core')['useVModels']
+  const useVibrate: typeof import('@vueuse/core')['useVibrate']
+  const useVirtualList: typeof import('@vueuse/core')['useVirtualList']
+  const useWakeLock: typeof import('@vueuse/core')['useWakeLock']
+  const useWebNotification: typeof import('@vueuse/core')['useWebNotification']
+  const useWebSocket: typeof import('@vueuse/core')['useWebSocket']
+  const useWebWorker: typeof import('@vueuse/core')['useWebWorker']
+  const useWebWorkerFn: typeof import('@vueuse/core')['useWebWorkerFn']
+  const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
+  const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
+  const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
+  const watch: typeof import('vue')['watch']
+  const watchAtMost: typeof import('@vueuse/core')['watchAtMost']
+  const watchDebounced: typeof import('@vueuse/core')['watchDebounced']
+  const watchEffect: typeof import('vue')['watchEffect']
+  const watchIgnorable: typeof import('@vueuse/core')['watchIgnorable']
+  const watchOnce: typeof import('@vueuse/core')['watchOnce']
+  const watchPausable: typeof import('@vueuse/core')['watchPausable']
+  const watchPostEffect: typeof import('vue')['watchPostEffect']
+  const watchSyncEffect: typeof import('vue')['watchSyncEffect']
+  const watchThrottled: typeof import('@vueuse/core')['watchThrottled']
+  const watchWithFilter: typeof import('@vueuse/core')['watchWithFilter']
+  const whenever: typeof import('@vueuse/core')['whenever']
+}
+`,"/packages/framework/types/components.d.ts":`// generated by unplugin-vue-components
+// We suggest you to commit this file into source control
+// Read more: https://github.com/vuejs/vue-next/pull/3399
+import '@vue/runtime-core'
+
+declare module '@vue/runtime-core' {
+  export interface GlobalComponents {
+    IFeatherBookOpen: typeof import('~icons/feather/book-open')['default']
+    IFeatherFileText: typeof import('~icons/feather/file-text')['default']
+    IFeatherHome: typeof import('~icons/feather/home')['default']
+    IFeatherInfo: typeof import('~icons/feather/info')['default']
+    IFeatherMinusCircle: typeof import('~icons/feather/minus-circle')['default']
+    IFeatherPlusCircle: typeof import('~icons/feather/plus-circle')['default']
+    IVscodeIconsDefaultFolder: typeof import('~icons/vscode-icons/default-folder')['default']
+    NBreadcrumb: typeof import('naive-ui')['NBreadcrumb']
+    NBreadcrumbItem: typeof import('naive-ui')['NBreadcrumbItem']
+    NButton: typeof import('naive-ui')['NButton']
+    NCard: typeof import('naive-ui')['NCard']
+    NCheckbox: typeof import('naive-ui')['NCheckbox']
+    NColorPicker: typeof import('naive-ui')['NColorPicker']
+    NForm: typeof import('naive-ui')['NForm']
+    NFormItem: typeof import('naive-ui')['NFormItem']
+    NH2: typeof import('naive-ui')['NH2']
+    NIcon: typeof import('naive-ui')['NIcon']
+    NIconWrapper: typeof import('naive-ui')['NIconWrapper']
+    NInput: typeof import('naive-ui')['NInput']
+    NSelect: typeof import('naive-ui')['NSelect']
+    NSlider: typeof import('naive-ui')['NSlider']
+    NSpin: typeof import('naive-ui')['NSpin']
+    NSwitch: typeof import('naive-ui')['NSwitch']
+    NTable: typeof import('naive-ui')['NTable']
+    NTabPane: typeof import('naive-ui')['NTabPane']
+    NTabs: typeof import('naive-ui')['NTabs']
+    NTree: typeof import('naive-ui')['NTree']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
+  }
+}
+
+export {}
+`,"/packages/home/components/AppTile.vue":`<template lang="pug">
+router-link.inline-block(:to="href")
+  n-card.app-tile.w-min(:title="title" :hoverable="true")
+    template(#header-extra v-if="$slots.icon")
+      n-icon.ml-4(size="24")
+        slot(name="icon")
+    slot
+</template>
+
+<script lang="ts" setup>
+defineProps<{
+  title: string
+  href: string
+}>()
+<\/script>
+
+<style lang="sass" scoped>
+.app-tile
+  min-width: 15rem
+</style>
+`,"/packages/home/components/index.ts":`export { default as AppTile } from "./AppTile.vue"
+`,"/packages/home/pages/index.vue":`<template lang="pug">
+.index.p-4.w-full
+  .apps
+    app-tile(title="Fairytome" href="/fairytome")
+      template(#icon): i-feather-book-open
+      | Storybook-like component playground
+    app-tile(title="About" href="/about")
+      template(#icon): i-feather-info
+      | Information about this page
+</template>
+
+<script lang="ts" setup>
+import { AppTile } from "@/home/components"
+<\/script>
+
+<style lang="sass" scoped>
+.apps
+  > *
+    margin-right: 1rem
+    margin-bottom: 1rem
+</style>
+`,"/packages/utilities/composables/component.ts":`import { ref, onMounted, onBeforeUnmount, type Ref } from "vue"
+
+export function useIsAlive(): Ref<boolean> {
+  const isAlive = ref(false)
+
+  onMounted(() => {
+    isAlive.value = true
+  })
+
+  onBeforeUnmount(() => {
+    isAlive.value = false
+  })
+
+  return isAlive
+}
+`,"/packages/utilities/vite/index.ts":`import * as pages from "./pages"
+import * as plugins from "./plugins"
+
+export default { pages, plugins }
+`,"/packages/utilities/vite/pages.ts":`import glob from "glob"
+
+export function fetchDirs(basePackage = "home") {
+  const pageFolders = glob.sync("packages/*/pages")
+  return pageFolders.map((folder: string) => {
+    const packageName = folder.split("/")[1]
+
+    return {
+      dir: folder,
+      baseRoute: packageName === basePackage ? "" : packageName,
+    }
+  })
+}
+`,"/packages/about/structure/entries/index.html.md":`## \`index.html\`
+
+Entry point for all processes:
+* dev
+* build
+* more examples
+`,"/packages/framework/assets/public/favicon.ico":"\0\0\0\0  \0\0\0 \0\uFFFD\0\0\0\0\0(\0\0\0 \0\0\0@\0\0\0\0 \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA3\uFFFD\uFFFDA3\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\v\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\v\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDAZ\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDAZ\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\uFFFD\uFFFDA\u0243\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\u0243\uFFFDA\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDAz\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDAz\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA.\uFFFD\uFFFDA\u07C3\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\u07C3\uFFFDA.\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDAH\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDAH\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDAf\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDAf\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA \uFFFD\uFFFDA\u0483\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\u0483\uFFFDA \uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD|\uFFFD?\uFFFD|\uFFFD?\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA7\uFFFD\uFFFDA\u60F8A\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFDjl9\uFFFDjl9\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\u60F8A7\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA	\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFDw\uFFFD=\uFFFD_L5\uFFFD_L5\uFFFDw\uFFFD=\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA	\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDAR\uFFFD\uFFFDA\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFD@\uFFFDfa8\uFFFD^H5\uFFFD^H5\uFFFDfa8\uFFFD\uFFFD\uFFFD@\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFDAR\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\uFFFD\uFFFDA\x83\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFDr\uFFFD<\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFDr\uFFFD<\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\x83\uFFFDA\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDAq\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD}\uFFFD?\uFFFDcW7\uFFFD^H5\uFFFD^I5\uFFFD^I5\uFFFD^H5\uFFFDcW7\uFFFD}\uFFFD?\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDAq\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA(\uFFFD\uFFFDA\u0683\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFDmv:\uFFFD^H5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^H5\uFFFDmv:\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\u0683\uFFFDA(\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFDy\uFFFD>\uFFFD`P6\uFFFD^H5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^H5\uFFFD`P6\uFFFDy\uFFFD>\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA@\uFFFD\uFFFDA\uC0F8A\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFD@\uFFFDii9\uFFFD]G5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD]G5\uFFFDii9\uFFFD\uFFFD\uFFFD@\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uC0F8A@\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\r\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFDu\uFFFD=\uFFFD_K5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD_K5\uFFFDu\uFFFD=\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\r\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA]\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\x7F\uFFFD@\uFFFDe]7\uFFFD^H5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^J5\uFFFD^J5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^H5\uFFFDe]7\uFFFD\x7F\uFFFD@\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA]\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\x1B\uFFFD\uFFFDA\u0303\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFDp\x7F;\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD_L5n_L5n^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFDp\x7F;\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\u0303\uFFFDA\x1B\uFFFD\uFFFDA\0\0\0\0\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA}\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD|\uFFFD?\uFFFDbT6\uFFFD^H5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD_J5\uFFFDaP6aP6_J5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^H5\uFFFDbT6\uFFFD|\uFFFD?\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA}\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA\0\uFFFD\uFFFDA/\uFFFD\uFFFDA\u10F8A\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFDlq9\uFFFD^H5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD_L5P^H5\0^H5\0_L5P^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^H5\uFFFDlq9\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\u10F8A/\uFFFD\uFFFDA\0\uFFFD\uFFFDA\x07\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFDx\uFFFD=\uFFFD`N6\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD_K5\uFFFDbT7\baQ6\0aQ6\0bT7\b_K5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD`N6\uFFFDx\uFFFD=\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\x07\uFFFD\uFFFDAW\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFD@\uFFFDgd8\uFFFD^H5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^J5\uFFFD`M65_K5\0jf9\0jf9\0_K5\0`M65^J5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^H5\uFFFDgd8\uFFFD\uFFFD\uFFFD@\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDAW\uFFFD\uFFFDA\uFFFD\uFFFD\uFFFDA\u0203\uFFFDA\u0183\uFFFDA\u0183\uFFFDA\u0184\uFFFDA\uFFFDv\uFFFD=\uFFFD_K5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD_K5uha9bS7\0\0\0\0\0\0\0\0\0bS7\0ha9_K5u^I5\uFFFD^I5\uFFFD^I5\uFFFD^I5\uFFFD_K5\uFFFDv\uFFFD=\u0184\uFFFDA\u0183\uFFFDA\u0183\uFFFDA\u0183\uFFFDA\u0183\uFFFDA\u0203\uFFFDA\uFFFD\uFFFD\uFFFDA\uFFFD\uFFFDA\r\uFFFD\uFFFDA\r\uFFFD\uFFFDA\r\uFFFD\uFFFDA\r\uFFFD\uFFFDA\rlr:\r\\D4\r^I5\r^I5\r^I5\r^I5\r`M6^H5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0^H5\0`M6^I5\r^I5\r^I5\r^I5\r\\D4\rlr9\r\uFFFD\uFFFDA\r\uFFFD\uFFFDA\r\uFFFD\uFFFDA\r\uFFFD\uFFFDA\r\uFFFD\uFFFDA\r\uFFFD\uFFFDA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\x7F\uFFFD\uFFFD\uFFFD?\uFFFD\uFFFD\uFFFD?\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\x07\uFFFD\uFFFD\uFFFD\x07\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\0\0\uFFFD\uFFFD\0\0\uFFFD\uFFFD\0\0\x7F\uFFFD\0\0\x7F\uFFFD\0\0?\uFFFD\0\0?\uFFFD\0\0\uFFFD\0\0\uFFFD\0\0\uFFFD\0\0\x07\uFFFD\0\0\x07\uFFFD\0\0\uFFFD\0\0\uFFFD\uFFFD\0\uFFFD\0\0\uFFFD\0\0\uFFFD\0\0\x07\uFFFD\0\uFFFD\uFFFD\uFFFD\uFFFD","/packages/framework/components/background/SvgBlob.entry.vue":`<template lang="pug">
+svg-blob(:color="colors")
+</template>
+
+<script lang="ts" setup>
+import SvgBlob from "./SvgBlob.vue"
+
+const props = defineProps<{ themeColorIndexOffset: number }>()
+const index = $computed(() => props.themeColorIndexOffset % PALETTE_COLOR_COUNT)
+
+const colors = $computed(() => [
+  \`var(--theme-color\${index}-lighter\`,
+  \`var(--theme-color\${index}\`,
+  \`var(--theme-color\${index}-darker\`,
+])
+<\/script>
+
+<script lang="ts">
+import { createEntry } from "@/fairytome/entry"
+import { PALETTE_COLOR_COUNT } from "@/framework/constants"
+import SvgBlobComponent from "./SvgBlob.vue"
+
+export const entry = createEntry<SvgBlobComponent>({
+  component: SvgBlobComponent,
+  controls: {
+    themeColorIndexOffset: {
+      type: "range",
+      label: "Theme color index offset",
+      min: 0,
+      max: PALETTE_COLOR_COUNT,
+      step: 1,
+      initial: 0,
+    },
+    speedFactor: {
+      type: "range",
+      label: "Speed factor",
+      min: -5,
+      max: 5,
+      step: 0.05,
+      initial: 1,
+    },
+    rotationSpeed: {
+      type: "range",
+      label: "Rotation speed",
+      min: 0,
+      max: 10,
+      step: 0.05,
+      initial: 0,
+    },
+    amplitudeModifier: {
+      type: "range",
+      label: "Amplitude modifier",
+      min: 0,
+      max: 10,
+      step: 0.05,
+      initial: 1,
+    },
+    segments: {
+      type: "range",
+      label: "Segments",
+      min: 2,
+      max: 32,
+      step: 1,
+      initial: 4,
+    },
+    showDebug: {
+      type: "checkbox",
+      label: "Show debug utilities",
+      initial: false,
+    },
+  },
+})
+<\/script>
+`,"/packages/framework/components/background/SvgBlob.vue":`<template lang="pug">
+svg.overflow-visible(viewBox="0 0 1 1" :class="{ debug: showDebug }")
+  defs(v-if="Array.isArray(color)")
+    linearGradient(:id="\`gradient-\${id}\`")
+      stop(
+        v-for="(stop, index) in color"
+        :offset="index / (color.length - 1)"
+        :stop-color="stop"
+      )
+  defs(v-else)
+    linearGradient(:id="\`gradient-\${id}\`")
+      stop(:stop-color="color")
+  g.blob(:transform="\`scale(\${scale}) rotate(\${rotation})\`")
+    path(stroke-width="0.05" :d="pathDefinition")
+  g(v-if="showDebug" stroke-width="0.0025")
+    g(:transform="\`scale(\${scale})\`")
+      svg-debugger(:path="pathDefinition")
+    foreignObject(width="1" height="1")
+      equation-plotter(:points="controlPoints.flat(1)" :scale="scale")
+    svg-ruler
+</template>
+
+<script lang="ts" setup>
+import { useTimestamp } from "@vueuse/core"
+import { v4 as uuid } from "uuid"
+import { computed, ref, watch } from "vue"
+import { useBezierControlPoints } from "@/framework/composables/background"
+import {
+  EquationPlotter,
+  SvgDebugger,
+  SvgRuler,
+} from "@/utilities/components/svg"
+import { useIsAlive } from "@/utilities/composables/component"
+
+const id = uuid()
+const isAlive = useIsAlive()
+const scale = ref(0.75)
+
+const props = withDefaults(
+  defineProps<{
+    timestamp?: number
+    speedFactor?: number
+    rotationSpeed?: number
+    amplitudeModifier?: number
+    showDebug?: boolean
+    segments?: number
+    color: string | string[]
+  }>(),
+  {
+    speedFactor: 1,
+    rotationSpeed: 0,
+    amplitudeModifier: 1,
+    segments: 4,
+    showDebug: false,
+  }
+)
+
+const timestamp = computed<number>(() => {
+  if (!isAlive.value) {
+    return 0
+  }
+
+  if (typeof props.timestamp === "number") {
+    return props.timestamp
+  }
+
+  return useTimestamp().value
+})
+const progress = ref(0)
+const rotation = ref(0)
+const controlPoints = useBezierControlPoints(progress, {
+  jitter: { offset: Math.PI * 2, coefficient: 0.3 },
+  amplitude: computed(() => 0.05 * props.amplitudeModifier),
+  segments: toRef(props, "segments"),
+})
+
+watch(timestamp, (current, previous) => {
+  progress.value +=
+    ((current - previous) / 1000) * Math.pow(2, props.speedFactor - 1)
+  rotation.value += ((current - previous) / 1000) * props.rotationSpeed ** 2
+})
+
+const segmentPoints = $computed(() =>
+  controlPoints.map((controls, index) => {
+    const previous =
+      controlPoints[index === 0 ? controlPoints.length - 1 : index - 1]
+    return [
+      (controls[0][0] + previous[1][0]) / 2,
+      (controls[0][1] + previous[1][1]) / 2,
+    ]
+  })
+)
+
+const start = $computed(() => segmentPoints[0])
+const pathDefinition = $computed(() => [
+  \`M \${start[0]} \${start[1]}\`,
+  ...controlPoints.map(
+    (controls, index) =>
+      \`C \${controls[0][0]} \${controls[0][1]} \${controls[1][0]} \${
+        controls[1][1]
+      } \${segmentPoints[(index + 1) % segmentPoints.length][0]} \${
+        segmentPoints[(index + 1) % segmentPoints.length][1]
+      }\`
+  ),
+])
+
+const fill = computed(() => \`url(#gradient-\${id})\`)
+let angle = $ref(0)
+const pos = $computed(() => ({
+  sin: Math.sin((angle * Math.PI * 2) / 360) * 1.15,
+  cos: Math.cos((angle * Math.PI * 2) / 360) * 1.15,
+}))
+
+defineExpose({ angle, pos })
+<\/script>
+
+<style lang="sass" scoped>
+svg
+  filter: blur(var(--blur, 0))
+
+  *
+    transform-origin: center center
+
+  &.debug
+    border: 1px solid black
+
+    .blob
+      &:not(.debug)
+        opacity: .25
+
+      &.debug
+        fill: none
+
+        .bottom.right
+          stroke: red
+
+        .bottom.left
+          stroke: blue
+
+        .top.left
+          stroke: green
+
+        .top.right
+          stroke: yellow
+
+  > .blob
+    transition: opacity .5s
+
+    path
+      fill: v-bind(fill)
+</style>
+`,"/packages/framework/components/background/index.ts":`export { default as SvgBlob } from "./SvgBlob.vue"
+`,"/packages/framework/components/transitions/Fade.vue":`<template lang="pug">
+.transition-fade(
+  :style="{ '--transition-fade-duration': duration }"
+  v-bind="$attrs"
+)
+  transition(name="fade" v-bind="transition")
+    slot
+</template>
+
+<script lang="ts" setup>
+import type { BaseTransitionProps } from "vue"
+
+defineProps<{ duration?: string; transition?: BaseTransitionProps }>()
+<\/script>
+
+<style lang="sass" scoped>
+.transition-fade
+  > :deep(.fade-enter-active), :deep(.fade-leave-active)
+    transition: opacity var(--transition-fade-duration, 1s)
+
+  > :deep(.fade-enter-from), > :deep(.fade-leave-to)
+    opacity: 0
+</style>
+`,"/packages/framework/components/transitions/index.ts":`export { default as Fade } from "./Fade.vue"
+`,"/packages/framework/components/ui/BreadcrumbItem.vue":`<template lang="pug">
+n-breadcrumb-item(
+  :clickable="typeof href !== 'undefined'"
+  @click="$router.push(href)"
+)
+  n-icon.mr-1: slot(name="icon")
+  slot
+</template>
+
+<script lang="ts" setup>
+defineProps<{ href?: string }>()
+<\/script>
+`,"/packages/framework/components/ui/index.ts":`export { default as BreadcrumbItem } from "./BreadcrumbItem.vue"
+`,"/packages/utilities/components/svg/Debugger.vue":`<template lang="pug">
+g
+  curve(v-for="curve in curves" v-bind="curve")
+</template>
+
+<script lang="ts" setup>
+import { parseSVG } from "svg-path-parser"
+import { PALETTE } from "@/framework/components/provide"
+import { Curve } from "./debug"
+
+const props = defineProps<{ path: string | string[] }>()
+const palette = $(inject<[string, string, string][]>(PALETTE))
+
+const commands = $computed(() =>
+  parseSVG(Array.isArray(props.path) ? props.path.join(" ") : props.path)
+)
+
+const curves = $computed(() =>
+  commands.flatMap((command, index) => {
+    if (command.command !== "curveto") {
+      return []
+    }
+
+    const previous = commands[index - 1]
+
+    if (!("x" in previous) || !("y" in previous)) {
+      return []
+    }
+
+    return [
+      {
+        start: [previous.x, previous.y],
+        end: [command.x, command.y],
+        controlPoints: [
+          [command.x1, command.y1],
+          [command.x2, command.y2],
+        ],
+        themeColorIndex: index % palette.length,
+      },
+    ]
+  })
+)
+<\/script>
+`,"/packages/utilities/components/svg/EquationPlotter.vue":`<template lang="pug">
+canvas.w-full.h-full(ref="canvas" :width="width" :height="height")
+</template>
+
+<script lang="ts" setup>
+const props = withDefaults(
+  defineProps<{ points: [number, number][]; scale?: number }>(),
+  { scale: 1 }
+)
+const { points, scale } = $(props)
+const canvas = ref<HTMLCanvasElement>()
+
+const { width, height } = $(useElementBounding(canvas))
+const backup = $computed(() => new OffscreenCanvas(width, height))
+
+let ctx: CanvasRenderingContext2D | null = null
+let backupCtx: OffscreenCanvasRenderingContext2D | null = null
+function render() {
+  if (ctx === null) {
+    if (typeof canvas.value === "undefined") {
+      return
+    }
+
+    ctx = canvas.value.getContext("2d")
+    backupCtx = backup.getContext("2d")
+  }
+
+  if (
+    ctx === null ||
+    backupCtx === null ||
+    typeof canvas.value === "undefined"
+  ) {
+    return
+  }
+
+  backupCtx.clearRect(0, 0, width, height)
+  backupCtx.drawImage(canvas.value, 0, 0)
+
+  ctx.save()
+  ctx.clearRect(0, 0, width, height)
+  ctx.globalAlpha = 0.975
+  ctx.drawImage(backup, 0, 0)
+
+  ctx.translate(width / 2, height / 2)
+  ctx.scale(scale, scale)
+  ctx.translate(-width / 2, -height / 2)
+
+  ctx.globalAlpha = 1
+  ctx.fillStyle = "#000"
+  points.forEach(([x, y]) => {
+    ctx?.fillRect(x * width, y * height, 1, 1)
+  })
+  ctx.restore()
+}
+
+watch(
+  () => points.length,
+  () => {
+    ctx?.clearRect(0, 0, width, height)
+  }
+)
+
+useRafFn(render)
+<\/script>
+`,"/packages/utilities/components/svg/Ruler.vue":`<template lang="pug">
+g(stroke-width=".25%" stroke="black" opacity=".5")
+  g.top
+    g(v-for="index in 9" :transform="\`translate(\${index / 10}, 0)\`")
+      line(x1="0" x2="0" y1="0" y2="0.01")
+      text(transform="translate(-0.02, 0.04) scale(0.002)") {{ index / 10 }}
+  g.bottom
+    g(v-for="index in 9" :transform="\`translate(\${index / 10}, 0.99)\`")
+      line(x1="0" x2="0" y1="0" y2="0.01")
+      text(transform="translate(-0.02, -0.01) scale(0.002)") {{ index / 10 }}
+  g.left
+    g(v-for="index in 9" :transform="\`translate(0, \${index / 10})\`")
+      line(x1="0" x2="0.01" y1="0" y2="0")
+      text(transform="translate(0.015, 0.01) scale(0.002)") {{ index / 10 }}
+  g.right
+    g(v-for="index in 9" :transform="\`translate(0.99, \${index / 10})\`")
+      line(x1="0" x2="0.01" y1="0" y2="0")
+      text(transform="translate(-0.04, 0.01) scale(0.002)") {{ index / 10 }}
+</template>
+`,"/packages/utilities/components/svg/index.ts":`export { default as SvgDebugger } from "./Debugger.vue"
+export { default as EquationPlotter } from "./EquationPlotter.vue"
+export { default as SvgRuler } from "./Ruler.vue"
+`,"/packages/utilities/vite/plugins/index.ts":`export { ViteGenerateIndex } from "./vite-generate-index/plugin"
+`,"/packages/utilities/components/svg/debug/Curve.vue":`<template lang="pug">
+defs
+  linearGradient(
+    :id="\`gradient-\${id}\`"
+    :x1="start[0]"
+    :x2="end[0]"
+    :y1="start[1]"
+    :y2="end[1]"
+  )
+    stop(offset="0%" :stop-color="colors.lighter")
+    stop(offset="50%" :stop-color="colors.base")
+    stop(offset="100%" :stop-color="colors.darker")
+g(fill="none")
+  line(
+    :x1="start[0] - POINT_CROSS_LINE_DISTANCE"
+    :x2="start[0] + POINT_CROSS_LINE_DISTANCE"
+    :y1="start[1] - POINT_CROSS_LINE_DISTANCE"
+    :y2="start[1] + POINT_CROSS_LINE_DISTANCE"
+    :stroke="colors.darker"
+  )
+  line(
+    :x1="end[0] - POINT_CROSS_LINE_DISTANCE"
+    :x2="end[0] + POINT_CROSS_LINE_DISTANCE"
+    :y1="end[1] + POINT_CROSS_LINE_DISTANCE"
+    :y2="end[1] - POINT_CROSS_LINE_DISTANCE"
+    :stroke="colors.lighter"
+  )
+  path(:d="path" :stroke="\`url(#gradient-\${id})\`")
+  path(
+    :d="[path, \`L 0.5 0.5\`]"
+    :fill="\`url(#gradient-\${id})\`"
+    fill-opacity="0.2"
+  )
+  circle(
+    :cx="controlPoints[0][0]"
+    :cy="controlPoints[0][1]"
+    :r="POINT_CROSS_LINE_DISTANCE"
+    :stroke="colors.darker"
+  )
+  circle(
+    :cx="controlPoints[1][0]"
+    :cy="controlPoints[1][1]"
+    :r="POINT_CROSS_LINE_DISTANCE"
+    :stroke="colors.lighter"
+  )
+  line(
+    :x1="start[0]"
+    :y1="start[1]"
+    :x2="controlPoints[0][0]"
+    :y2="controlPoints[0][1]"
+    :stroke="colors.darker"
+  )
+  line(
+    :x1="end[0]"
+    :y1="end[1]"
+    :x2="controlPoints[1][0]"
+    :y2="controlPoints[1][1]"
+    :stroke="colors.lighter"
+  )
+</template>
+
+<script lang="ts" setup>
+import { v4 as uuid } from "uuid"
+
+const id = uuid()
+
+const props = defineProps<{
+  start: [number, number]
+  end: [number, number]
+  controlPoints: [[number, number], [number, number]]
+  themeColorIndex: number
+}>()
+
+const POINT_CROSS_LINE_DISTANCE = 0.01
+
+const path = $computed(() => [
+  \`M \${props.start[0]} \${props.start[1]}\`,
+  \`C \${props.controlPoints[0][0]} \${props.controlPoints[0][1]}\`,
+  \`\${props.controlPoints[1][0]} \${props.controlPoints[1][1]}\`,
+  \`\${props.end[0]} \${props.end[1]}\`,
+])
+
+const colors = $computed(() => ({
+  base: \`var(--theme-color\${props.themeColorIndex})\`,
+  lighter: \`var(--theme-color\${props.themeColorIndex}-lighter)\`,
+  darker: \`var(--theme-color\${props.themeColorIndex}-darker)\`,
+}))
+<\/script>
+`,"/packages/utilities/components/svg/debug/index.ts":`export { default as Curve } from "./Curve.vue"
+`,"/packages/utilities/vite/plugins/vite-generate-index/format.ts":`import prettier from "prettier"
+
+const prettierConfig = prettier
+  .resolveConfigFile()
+  .then((path) => (path === null ? null : prettier.resolveConfig(path)))
+
+export async function format(source: string) {
+  const options = await prettierConfig
+
+  if (options === null) {
+    throw new Error("Couldn't fetch prettier config")
+  }
+
+  return prettier.format(source, { ...options, parser: "typescript" })
+}
+`,"/packages/utilities/vite/plugins/vite-generate-index/generate.ts":`import camelCase from "lodash/camelCase"
+import fs from "node:fs/promises"
+import { basename } from "node:path"
+import { format } from "./format"
+import type { PluginOptions } from "./options"
+import {
+  fetchFileInformation,
+  fetchFilesForDir,
+  fetchRelevantDirs,
+} from "./scan"
+import type { FileInformation } from "./scan"
+
+export async function generateIndexFiles(
+  options: PluginOptions
+): Promise<void> {
+  const dirs = await fetchRelevantDirs(options.dirs)
+  dirs.forEach((dir) => generateIndexFile(dir, options))
+}
+
+async function generateIndexFile(
+  dir: string,
+  options: Omit<PluginOptions, "dirs">
+): Promise<void> {
+  const indexFilename = \`index.\${options.extension}\`
+
+  const files = await fetchFilesForDir(
+    dir,
+    options.includeGlobPattern,
+    options.excludeFiles
+  )
+
+  const relevantFiles = files.filter(
+    (file) => ![indexFilename].includes(basename(file))
+  )
+
+  const filesWithExports = await Promise.all(
+    relevantFiles.map((file) => fetchFileInformation(file))
+  )
+
+  if (
+    filesWithExports.length === 0 ||
+    !(await shouldUpdate(
+      \`\${dir}/\${indexFilename}\`,
+      filesWithExports.map((file) => file.path)
+    ))
+  ) {
+    return
+  }
+
+  const source = filesWithExports.map(fileInformationToExport).join("\\n")
+  const formattedSource = await format(source)
+
+  await fs.writeFile(\`\${dir}/index.\${options.extension}\`, formattedSource)
+}
+
+function fileInformationToExport({ exports, file }: FileInformation): string {
+  if (exports.length === 1 && exports[0].type === "default") {
+    return \`export { default as \${file.name} } from "./\${file.basename}"\`
+  }
+
+  const importPath = file.extension.includes("ts") ? file.name : file.basename
+
+  return \`export * as \${camelCase(file.name)} from "./\${importPath}"\`
+}
+
+async function shouldUpdate(
+  indexPath: string,
+  relevantFiles: string[]
+): Promise<boolean> {
+  try {
+    const indexStat = await fs.stat(indexPath)
+
+    const fileStats = await Promise.all(
+      relevantFiles.map((path) => fs.stat(path))
+    )
+
+    return fileStats.some((fileStat) => fileStat.mtimeMs > indexStat.mtimeMs)
+  } catch {
+    return true
+  }
+}
+`,"/packages/utilities/vite/plugins/vite-generate-index/options.ts":`export type PluginOptions = {
+  dirs: string[]
+  extension: "js" | "ts" | string
+  includeGlobPattern: string
+  excludeFiles: RegExp[]
+}
+
+export const defaults: PluginOptions = {
+  dirs: [],
+  extension: "ts",
+  includeGlobPattern: "*.*",
+  excludeFiles: [],
+}
+`,"/packages/utilities/vite/plugins/vite-generate-index/plugin.ts":`import merge from "ts-deepmerge"
+import type { Plugin } from "vite"
+import { generateIndexFiles } from "./generate"
+import type { PluginOptions } from "./options"
+import { defaults } from "./options"
+
+const NAME = "vite-generate-index"
+
+export function ViteGenerateIndex(options?: Partial<PluginOptions>): Plugin {
+  const mergedOptions = merge(defaults, options ?? {})
+
+  return {
+    name: NAME,
+    buildStart() {
+      generateIndexFiles(mergedOptions)
+    },
+    handleHotUpdate(): void {
+      generateIndexFiles(mergedOptions)
+    },
+  }
+}
+`,"/packages/utilities/vite/plugins/vite-generate-index/scan.ts":`import glob from "glob"
+import { findExports } from "mlly"
+import type { ESMExport } from "mlly"
+import fs from "node:fs/promises"
+import { basename } from "node:path"
+import { extname } from "path"
+import type { PluginOptions } from "./options"
+
+function globAsync(pattern: string): Promise<string[]> {
+  return new Promise((resolve, reject) =>
+    glob(pattern, (error, files) => {
+      if (error !== null) {
+        return reject(error)
+      }
+
+      return resolve(files)
+    })
+  )
+}
+
+export async function fetchRelevantDirs(
+  dirs: PluginOptions["dirs"]
+): Promise<string[]> {
+  const results = await Promise.all(dirs.map((pattern) => globAsync(pattern)))
+  return results.flat()
+}
+
+export async function fetchFilesForDir(
+  path: string,
+  pattern: PluginOptions["includeGlobPattern"],
+  exclude: PluginOptions["excludeFiles"]
+): Promise<string[]> {
+  const globResult = await globAsync(\`\${path}/\${pattern}\`)
+  return globResult.filter(
+    (result) => !exclude.some((regex) => regex.test(result))
+  )
+}
+
+function getAdditionalExports(filename: string): ESMExport[] {
+  if (extname(filename) === ".vue") {
+    return [{ type: "default", code: "", start: -1, end: -1, names: [] }]
+  }
+
+  return []
+}
+
+export async function scanExports(filepath: string): Promise<ESMExport[]> {
+  const code = await fs
+    .readFile(filepath)
+    .then((buffer) => buffer.toString("utf-8"))
+  const exports = findExports(code)
+
+  return [...exports, ...getAdditionalExports(filepath)]
+}
+
+export type FileInformation = {
+  path: string
+  exports: ESMExport[]
+  file: {
+    basename: string
+    name: string
+    extension: string
+  }
+}
+export async function fetchFileInformation(
+  file: string
+): Promise<FileInformation> {
+  const exports = await scanExports(file)
+  const extension = extname(file)
+
+  return {
+    path: file,
+    exports,
+    file: {
+      basename: basename(file),
+      name: basename(file, extension),
+      extension: extension.slice(1),
+    },
+  }
+}
+`};async function L(){return Object.keys(I)}async function _(e){var n;return(n=I[e])!=null?n:null}var B=Object.freeze({__proto__:null,fetchProjectFiles:L,fetchSource:_});y(B);
