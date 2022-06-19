@@ -22,6 +22,8 @@ const EXTENSION_TO_LANGUAGE: Record<string, string> = {
   gitignore: "ignore",
   gitattributes: "ignore",
   prettierignore: "ignore",
+  prettierrc: "json",
+  eslintcache: "json",
 }
 
 export function getLanguageFromExtension(extension: string): string {

@@ -8,10 +8,13 @@ type IconTest = (name: string, key: string) => boolean
 function createCustomRenderer(
   baseColor: string,
   icon: Icon,
-  topColor?: string,
-  backgroundColor?: string
+  options: {
+    topColor?: string
+    backgroundColor?: string
+    radius?: number
+  } = {}
 ): Icon {
-  return () => h(CustomFolder, { baseColor, icon, topColor, backgroundColor })
+  return () => h(CustomFolder, { baseColor, icon, ...options })
 }
 
 const testIsKey =
@@ -28,7 +31,7 @@ const specialFolderIcons: [test: IconTest, icon: Icon][] = [
   [testHasParent("dist"), icons.IconFolderBinary],
   [testIsKey("/packages"), icons.IconFolderApp],
   [testIsKey("/.yarn"), icons.IconFolderYarn],
-  [testHasParent(".github"), icons.IconFolderGithub],
+  [testIsKey("/.github"), icons.IconFolderGithub],
   [testHasParent("types"), icons.IconFolderTypescript],
   [testHasParent("assets"), icons.IconFolderAsset],
   [testHasParent("icons"), icons.IconFolderImages],
@@ -37,6 +40,14 @@ const specialFolderIcons: [test: IconTest, icon: Icon][] = [
   [testIsKey("/packages/framework"), icons.IconFeatherCode],
   [testIsKey("/packages/home"), icons.IconFeatherHome],
   [testIsKey("/packages/utilities"), icons.IconFeatherTool],
+  [
+    testHasParent(".github/workflows"),
+    createCustomRenderer("grey", icons.IconFeatherCpu, {
+      topColor: "black",
+      backgroundColor: "white",
+      radius: 6,
+    }),
+  ],
   [testHasParent("components"), createCustomRenderer("#14622a", icons.IconVue)],
   [
     testHasParent("composables"),
@@ -44,12 +55,10 @@ const specialFolderIcons: [test: IconTest, icon: Icon][] = [
   ],
   [
     testHasParent("pages"),
-    createCustomRenderer(
-      "#14622a",
-      icons.IconDefaultFile,
-      "white",
-      "rgba(0, 0, 0, 0.5)"
-    ),
+    createCustomRenderer("#14622a", icons.IconDefaultFile, {
+      topColor: "white",
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+    }),
   ],
   [testHasParent("vite"), createCustomRenderer("#14622a", icons.IconVite)],
 ]

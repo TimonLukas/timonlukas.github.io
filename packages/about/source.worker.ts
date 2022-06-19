@@ -1,5 +1,5 @@
 const allProjectFiles = import.meta.glob<string>(
-  "/(*|!(dist|.git|.idea|.yarn)/**|.github/**)",
+  "/(!(dist|.git|.idea|.yarn)|.github)/**",
   {
     as: "raw",
   }

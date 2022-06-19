@@ -30,13 +30,19 @@ function getFileIconByExtension(extension?: string): Icon {
   return fileIconsByExtension[extension] ?? icons.IconDefaultFile
 }
 
+const testHasParent = (parentKey: string) => (_: string, key: string) =>
+  key.startsWith(parentKey)
 const testRegex = (regex: RegExp) => (filename: string) => regex.test(filename)
 const testFilename = (name: string) => (filename: string) => name === filename
 const testStartsWith = (prefix: string) => (filename: string) =>
   filename.startsWith(prefix)
 const testEndsWith = (suffix: string) => (filename: string) =>
   filename.endsWith(suffix)
-const specialFileIcons: [test: (filename: string) => boolean, icon: Icon][] = [
+const specialFileIcons: [
+  test: (filename: string, key: string) => boolean,
+  icon: Icon
+][] = [
+  [testHasParent("/.github/workflows"), icons.IconFeatherCpu],
   [testRegex(/tsconfig(\..+)?\.json/m), icons.IconTsconfig],
   [testFilename("package.json"), icons.IconNpm],
   [testStartsWith("vite.config."), icons.IconVite],
@@ -51,8 +57,8 @@ const specialFileIcons: [test: (filename: string) => boolean, icon: Icon][] = [
   [testStartsWith(".yarn"), icons.IconYarn],
 ]
 
-function getSpecialIcon(filename: string): Icon | null {
-  const entry = specialFileIcons.find(([test]) => test(filename))
+function getSpecialIcon(filename: string, key: string): Icon | null {
+  const entry = specialFileIcons.find(([test]) => test(filename, key))
 
   if (typeof entry === "undefined") {
     return null
@@ -68,7 +74,7 @@ export function getFileIcon(key: string) {
     return icons.IconDefaultFile
   }
 
-  const specialIcon = getSpecialIcon(name)
+  const specialIcon = getSpecialIcon(name, key)
   if (specialIcon !== null) {
     return specialIcon
   }

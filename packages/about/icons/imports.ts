@@ -30,6 +30,7 @@ export { default as IconFeatherBookOpen } from "~icons/feather/book-open"
 export { default as IconFeatherCode } from "~icons/feather/code"
 export { default as IconFeatherHome } from "~icons/feather/home"
 export { default as IconFeatherTool } from "~icons/feather/tool"
+export { default as IconFeatherCpu } from "~icons/feather/cpu"
 
 export { default as IconDefaultFolder } from "~icons/vscode-icons/default-folder"
 export { default as IconRootFolder } from "~icons/vscode-icons/default-root-folder"

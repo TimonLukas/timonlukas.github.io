@@ -4,7 +4,7 @@ span.icon.relative
     i-vscode-icons-default-folder.folder
   n-icon-wrapper.absolute.top-3.left-2(
     :size="14"
-    :border-radius="0"
+    :border-radius="radius ?? 0"
     v-if="typeof backgroundColor !== 'undefined'"
     :color="backgroundColor"
   )
@@ -28,6 +28,7 @@ const props = defineProps<{
   topColor?: string
   icon: Component
   backgroundColor?: string
+  radius?: number
 }>()
 </script>
 
