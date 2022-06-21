@@ -15,7 +15,7 @@
       v-model:value="activeTab"
     )
       n-tab-pane.h-full(
-        tab="General structure"
+        :tab="TABS['general-structure']"
         name="general-structure"
         @transitionend.self="transitionEndHandler('general-structure', $event)"
       )
@@ -25,20 +25,27 @@
         .flex.items-center.justify-center.w-full.h-full.absolute.top-0
           n-spin(size="large")
       n-tab-pane.h-full(
-        tab="Vite config"
+        :tab="TABS['vite-config']"
         name="vite-config"
         @transitionend.self="transitionEndHandler('vite-config', $event)"
       )
       n-tab-pane.h-full(
-        tab="Custom plugins"
+        :tab="TABS['custom-plugins']"
         name="custom-plugins"
         @transitionend.self="transitionEndHandler('custom-plugins', $event)"
       )
+      n-tab-pane.h-full(
+        :tab="TABS['self-host']"
+        name="self-host"
+        @transitionend.self="transitionEndHandler('self-host', $event)"
+      )
+        self-host
 </template>
 
 <script lang="ts" setup>
 import { useRouteQuery } from "@vueuse/router"
 import type { Component } from "vue"
+import { SelfHost } from "@/about/components"
 import { Fade } from "@/framework/components/transitions/index"
 import { BreadcrumbItem } from "@/framework/components/ui"
 
@@ -46,6 +53,7 @@ const TABS = {
   "general-structure": "General structure",
   "vite-config": "Vite config",
   "custom-plugins": "Custom plugins",
+  "self-host": "Self hosting this page",
 }
 type TabId = keyof typeof TABS
 
