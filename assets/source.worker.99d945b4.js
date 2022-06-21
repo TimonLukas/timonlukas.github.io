@@ -1,4 +1,4 @@
-const T=Symbol("Comlink.proxy"),j=Symbol("Comlink.endpoint"),E=Symbol("Comlink.releaseProxy"),g=Symbol("Comlink.thrown"),N=e=>typeof e=="object"&&e!==null||typeof e=="function",P={canHandle:e=>N(e)&&e[T],serialize(e){const{port1:n,port2:o}=new MessageChannel;return y(e,n),[o,[o]]},deserialize(e){return e.start(),R(e)}},C={canHandle:e=>N(e)&&g in e,serialize({value:e}){let n;return e instanceof Error?n={isError:!0,value:{message:e.message,name:e.name,stack:e.stack}}:n={isError:!1,value:e},[n,[]]},deserialize(e){throw e.isError?Object.assign(new Error(e.value.message),e.value):e.value}},x=new Map([["proxy",P],["throw",C]]);function y(e,n=self){n.addEventListener("message",function o(s){if(!s||!s.data)return;const{id:i,type:f,path:a}=Object.assign({path:[]},s.data),t=(s.data.argumentList||[]).map(p);let c;try{const d=a.slice(0,-1).reduce((r,l)=>r[l],e),u=a.reduce((r,l)=>r[l],e);switch(f){case"GET":c=u;break;case"SET":d[a.slice(-1)[0]]=p(s.data.value),c=!0;break;case"APPLY":c=u.apply(d,t);break;case"CONSTRUCT":{const r=new u(...t);c=D(r)}break;case"ENDPOINT":{const{port1:r,port2:l}=new MessageChannel;y(e,l),c=O(r,[r])}break;case"RELEASE":c=void 0;break;default:return}}catch(d){c={value:d,[g]:0}}Promise.resolve(c).catch(d=>({value:d,[g]:0})).then(d=>{const[u,r]=v(d);n.postMessage(Object.assign(Object.assign({},u),{id:i}),r),f==="RELEASE"&&(n.removeEventListener("message",o),w(n))})}),n.start&&n.start()}function S(e){return e.constructor.name==="MessagePort"}function w(e){S(e)&&e.close()}function R(e,n){return h(e,[],n)}function m(e){if(e)throw new Error("Proxy has been released and is not useable")}function h(e,n=[],o=function(){}){let s=!1;const i=new Proxy(o,{get(f,a){if(m(s),a===E)return()=>b(e,{type:"RELEASE",path:n.map(t=>t.toString())}).then(()=>{w(e),s=!0});if(a==="then"){if(n.length===0)return{then:()=>i};const t=b(e,{type:"GET",path:n.map(c=>c.toString())}).then(p);return t.then.bind(t)}return h(e,[...n,a])},set(f,a,t){m(s);const[c,d]=v(t);return b(e,{type:"SET",path:[...n,a].map(u=>u.toString()),value:c},d).then(p)},apply(f,a,t){m(s);const c=n[n.length-1];if(c===j)return b(e,{type:"ENDPOINT"}).then(p);if(c==="bind")return h(e,n.slice(0,-1));const[d,u]=k(t);return b(e,{type:"APPLY",path:n.map(r=>r.toString()),argumentList:d},u).then(p)},construct(f,a){m(s);const[t,c]=k(a);return b(e,{type:"CONSTRUCT",path:n.map(d=>d.toString()),argumentList:t},c).then(p)}});return i}function F(e){return Array.prototype.concat.apply([],e)}function k(e){const n=e.map(v);return[n.map(o=>o[0]),F(n.map(o=>o[1]))]}const A=new WeakMap;function O(e,n){return A.set(e,n),e}function D(e){return Object.assign(e,{[T]:!0})}function v(e){for(const[n,o]of x)if(o.canHandle(e)){const[s,i]=o.serialize(e);return[{type:"HANDLER",name:n,value:s},i]}return[{type:"RAW",value:e},A.get(e)||[]]}function p(e){switch(e.type){case"HANDLER":return x.get(e.name).deserialize(e.value);case"RAW":return e.value}}function b(e,n,o){return new Promise(s=>{const i=M();e.addEventListener("message",function f(a){!a.data||!a.data.id||a.data.id!==i||(e.removeEventListener("message",f),s(a.data))}),e.start&&e.start(),e.postMessage(Object.assign({id:i},n),o)})}function M(){return new Array(4).fill(0).map(()=>Math.floor(Math.random()*Number.MAX_SAFE_INTEGER).toString(16)).join("-")}const I={"/.eslintrc-auto-import.json":`{
+const T=Symbol("Comlink.proxy"),j=Symbol("Comlink.endpoint"),E=Symbol("Comlink.releaseProxy"),g=Symbol("Comlink.thrown"),N=e=>typeof e=="object"&&e!==null||typeof e=="function",P={canHandle:e=>N(e)&&e[T],serialize(e){const{port1:n,port2:o}=new MessageChannel;return y(e,n),[o,[o]]},deserialize(e){return e.start(),R(e)}},S={canHandle:e=>N(e)&&g in e,serialize({value:e}){let n;return e instanceof Error?n={isError:!0,value:{message:e.message,name:e.name,stack:e.stack}}:n={isError:!1,value:e},[n,[]]},deserialize(e){throw e.isError?Object.assign(new Error(e.value.message),e.value):e.value}},x=new Map([["proxy",P],["throw",S]]);function y(e,n=self){n.addEventListener("message",function o(s){if(!s||!s.data)return;const{id:i,type:f,path:a}=Object.assign({path:[]},s.data),t=(s.data.argumentList||[]).map(p);let c;try{const d=a.slice(0,-1).reduce((r,l)=>r[l],e),u=a.reduce((r,l)=>r[l],e);switch(f){case"GET":c=u;break;case"SET":d[a.slice(-1)[0]]=p(s.data.value),c=!0;break;case"APPLY":c=u.apply(d,t);break;case"CONSTRUCT":{const r=new u(...t);c=D(r)}break;case"ENDPOINT":{const{port1:r,port2:l}=new MessageChannel;y(e,l),c=O(r,[r])}break;case"RELEASE":c=void 0;break;default:return}}catch(d){c={value:d,[g]:0}}Promise.resolve(c).catch(d=>({value:d,[g]:0})).then(d=>{const[u,r]=v(d);n.postMessage(Object.assign(Object.assign({},u),{id:i}),r),f==="RELEASE"&&(n.removeEventListener("message",o),w(n))})}),n.start&&n.start()}function C(e){return e.constructor.name==="MessagePort"}function w(e){C(e)&&e.close()}function R(e,n){return h(e,[],n)}function m(e){if(e)throw new Error("Proxy has been released and is not useable")}function h(e,n=[],o=function(){}){let s=!1;const i=new Proxy(o,{get(f,a){if(m(s),a===E)return()=>b(e,{type:"RELEASE",path:n.map(t=>t.toString())}).then(()=>{w(e),s=!0});if(a==="then"){if(n.length===0)return{then:()=>i};const t=b(e,{type:"GET",path:n.map(c=>c.toString())}).then(p);return t.then.bind(t)}return h(e,[...n,a])},set(f,a,t){m(s);const[c,d]=v(t);return b(e,{type:"SET",path:[...n,a].map(u=>u.toString()),value:c},d).then(p)},apply(f,a,t){m(s);const c=n[n.length-1];if(c===j)return b(e,{type:"ENDPOINT"}).then(p);if(c==="bind")return h(e,n.slice(0,-1));const[d,u]=k(t);return b(e,{type:"APPLY",path:n.map(r=>r.toString()),argumentList:d},u).then(p)},construct(f,a){m(s);const[t,c]=k(a);return b(e,{type:"CONSTRUCT",path:n.map(d=>d.toString()),argumentList:t},c).then(p)}});return i}function F(e){return Array.prototype.concat.apply([],e)}function k(e){const n=e.map(v);return[n.map(o=>o[0]),F(n.map(o=>o[1]))]}const A=new WeakMap;function O(e,n){return A.set(e,n),e}function D(e){return Object.assign(e,{[T]:!0})}function v(e){for(const[n,o]of x)if(o.canHandle(e)){const[s,i]=o.serialize(e);return[{type:"HANDLER",name:n,value:s},i]}return[{type:"RAW",value:e},A.get(e)||[]]}function p(e){switch(e.type){case"HANDLER":return x.get(e.name).deserialize(e.value);case"RAW":return e.value}}function b(e,n,o){return new Promise(s=>{const i=M();e.addEventListener("message",function f(a){!a.data||!a.data.id||a.data.id!==i||(e.removeEventListener("message",f),s(a.data))}),e.start&&e.start(),e.postMessage(Object.assign({id:i},n),o)})}function M(){return new Array(4).fill(0).map(()=>Math.floor(Math.random()*Number.MAX_SAFE_INTEGER).toString(16)).join("-")}const I={"/.eslintrc-auto-import.json":`{
   "globals": {
     "EffectScope": true,
     "asyncComputed": true,
@@ -9099,10 +9099,67 @@ let showDotEntries = $computed({
   :deep(.n-empty)
     margin-top: 4rem
 </style>
+`,"/packages/about/components/SelfHost.vue":`<template lang="pug">
+.block-self-host.mx-auto.mt-4(class="md:w-5/6 lg:w-3/4 xl:w-1/2")
+  n-h1 Self hosting this page
+  n-p Self-hosting this page is very easy thanks to the amazing #[n-a(href="https://redbean.dev/" target="_blank") redbean server],&nbsp;
+    | which itself is based on the even greater #[n-a(href="https://justine.lol/cosmopolitan/index.html" target="_blank") cosmopolitan libc]. It brings the following features:
+  n-ul.list-disc
+    n-li The same binary works on Linux, Mac, Windows, FreeBSD, OpenBSD, NetBSD, and can even be booted from BIOS!
+      n-ul.list-disc
+        n-li For more details on this, check out the #[n-a(href="https://justine.lol/ape.html" target="_blank") \u03B1c\u03C4\xB5\u03B1lly p\u03B4r\u03C4\u03B1bl\u03B5 \u03B5x\u03B5c\xB5\u03C4\u03B1bl\u03B5] blog post.
+    n-li The server has #[n-a(href="https://redbean.dev/#benchmark" target="_blank") great performance] and can be used just as well in a desktop application as in a very complex internet-facing scalable platform. No need for nginx or similar!
+    n-li If you're up for it, the whole thing is even extendable and programmable through a #[n-a(href="https://redbean.dev/#lua" target="_blank") LUA interface]. And all of this is just the beginning!
+  n-p You can download a finished executable with this exact build of my website through this button:
+  .download-container.py-12.text-center
+    a(href="/server.com")
+      .download-link
+        n-button.download(type="primary" size="large")
+          i-feather-download
+          | Download
+          i-feather-download
+  n-p It's automatically generated during the #[n-a(href="https://github.com/TimonLukas/timonlukas.github.io/blob/main/.github/workflows/main.yml" target="_blank") build workflow], after the Vite project is generated, but before the pages are uploaded.&nbsp;
+    | In case you're interested in implementing something similar, check out my Github Action #[n-a(href="https://github.com/TimonLukas/action-static-redbean" target="_blank") for generating a redbean executable]! It's pretty easy to add.
+</template>
+
+<style lang="sass" scoped>
+@keyframes logo-rotate
+  0%
+    transform: rotate(20deg)
+  50%
+    transform: rotate(-20deg)
+  100%
+    transform: rotate(20deg)
+
+@keyframes logo-scale
+  0%
+    transform: scale(1.65)
+  50%
+    transform: scale(1.35)
+  100%
+    transform: scale(1.65)
+
+.block-self-host
+  .n-button
+    background: var(--n-color)
+
+  .download-link
+    animation: logo-scale 1s infinite
+
+  .download
+    animation: logo-rotate 3s infinite
+
+    svg:first-child
+      margin-right: 1rem
+
+    svg:last-child
+      margin-left: 1rem
+</style>
 `,"/packages/about/components/index.ts":`export { default as ProjectFileViewer } from "./ProjectFileViewer.vue"
 export { default as ProjectStructureEntry } from "./ProjectStructureEntry.vue"
 export { default as ProjectStructureExplorer } from "./ProjectStructureExplorer.vue"
 export { default as ProjectTree } from "./ProjectTree.vue"
+export { default as SelfHost } from "./SelfHost.vue"
 `,"/packages/about/composables/prism.ts":`import Prism from "prismjs"
 import "prismjs/plugins/inline-color/prism-inline-color"
 import "prismjs/plugins/inline-color/prism-inline-color.css"
@@ -9488,7 +9545,7 @@ export const getIconForFile = getFileIcon
       v-model:value="activeTab"
     )
       n-tab-pane.h-full(
-        tab="General structure"
+        :tab="TABS['general-structure']"
         name="general-structure"
         @transitionend.self="transitionEndHandler('general-structure', $event)"
       )
@@ -9498,20 +9555,27 @@ export const getIconForFile = getFileIcon
         .flex.items-center.justify-center.w-full.h-full.absolute.top-0
           n-spin(size="large")
       n-tab-pane.h-full(
-        tab="Vite config"
+        :tab="TABS['vite-config']"
         name="vite-config"
         @transitionend.self="transitionEndHandler('vite-config', $event)"
       )
       n-tab-pane.h-full(
-        tab="Custom plugins"
+        :tab="TABS['custom-plugins']"
         name="custom-plugins"
         @transitionend.self="transitionEndHandler('custom-plugins', $event)"
       )
+      n-tab-pane.h-full(
+        :tab="TABS['self-host']"
+        name="self-host"
+        @transitionend.self="transitionEndHandler('self-host', $event)"
+      )
+        self-host
 </template>
 
 <script lang="ts" setup>
 import { useRouteQuery } from "@vueuse/router"
 import type { Component } from "vue"
+import { SelfHost } from "@/about/components"
 import { Fade } from "@/framework/components/transitions/index"
 import { BreadcrumbItem } from "@/framework/components/ui"
 
@@ -9519,6 +9583,7 @@ const TABS = {
   "general-structure": "General structure",
   "vite-config": "Vite config",
   "custom-plugins": "Custom plugins",
+  "self-host": "Self hosting this page",
 }
 type TabId = keyof typeof TABS
 
@@ -10647,12 +10712,14 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     IFeatherBookOpen: typeof import('~icons/feather/book-open')['default']
+    IFeatherDownload: typeof import('~icons/feather/download')['default']
     IFeatherFileText: typeof import('~icons/feather/file-text')['default']
     IFeatherHome: typeof import('~icons/feather/home')['default']
     IFeatherInfo: typeof import('~icons/feather/info')['default']
     IFeatherMinusCircle: typeof import('~icons/feather/minus-circle')['default']
     IFeatherPlusCircle: typeof import('~icons/feather/plus-circle')['default']
     IVscodeIconsDefaultFolder: typeof import('~icons/vscode-icons/default-folder')['default']
+    NA: typeof import('naive-ui')['NA']
     NBreadcrumb: typeof import('naive-ui')['NBreadcrumb']
     NBreadcrumbItem: typeof import('naive-ui')['NBreadcrumbItem']
     NButton: typeof import('naive-ui')['NButton']
@@ -10661,10 +10728,13 @@ declare module '@vue/runtime-core' {
     NColorPicker: typeof import('naive-ui')['NColorPicker']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
+    NH1: typeof import('naive-ui')['NH1']
     NH2: typeof import('naive-ui')['NH2']
     NIcon: typeof import('naive-ui')['NIcon']
     NIconWrapper: typeof import('naive-ui')['NIconWrapper']
     NInput: typeof import('naive-ui')['NInput']
+    NLi: typeof import('naive-ui')['NLi']
+    NP: typeof import('naive-ui')['NP']
     NSelect: typeof import('naive-ui')['NSelect']
     NSlider: typeof import('naive-ui')['NSlider']
     NSpin: typeof import('naive-ui')['NSpin']
@@ -10673,6 +10743,7 @@ declare module '@vue/runtime-core' {
     NTabPane: typeof import('naive-ui')['NTabPane']
     NTabs: typeof import('naive-ui')['NTabs']
     NTree: typeof import('naive-ui')['NTree']
+    NUl: typeof import('naive-ui')['NUl']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
@@ -11450,4 +11521,4 @@ export async function fetchFileInformation(
     },
   }
 }
-`};async function L(){return Object.keys(I)}async function _(e){var n;return(n=I[e])!=null?n:null}var B=Object.freeze({__proto__:null,fetchProjectFiles:L,fetchSource:_});y(B);
+`};async function _(){return Object.keys(I)}async function L(e){var n;return(n=I[e])!=null?n:null}var B=Object.freeze({__proto__:null,fetchProjectFiles:_,fetchSource:L});y(B);
