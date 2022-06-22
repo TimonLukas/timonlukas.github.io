@@ -8184,6 +8184,7 @@ jobs:
       - name: Build redbean executable
         uses: TimonLukas/action-static-redbean@v1.0.2
       - run: mv redbean.com dist/server.com
+      - run: cp dist/index.html dist/404.html
       - run: touch dist/.nojekyll
       - name: Deploy \u{1F680}
         uses: JamesIves/github-pages-deploy-action@v4.3.3
